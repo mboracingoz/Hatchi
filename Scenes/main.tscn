@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://cf8880oauocta"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
+bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjgbg"]
+bg_color = Color(0.27110246, 0.2602791, 0.2151742, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bo1nx"]
+bg_color = Color(0.28485528, 0.5414254, 0.25359923, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gbba"]
+bg_color = Color(0.6298799, 0.025875766, 0.4792717, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjvhh"]
+bg_color = Color(0.40655044, 0.2904154, 0.19331902, 1)
+
+[node name="Main" type="Control" unique_id=339474420]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RootLayout" type="VBoxContainer" parent="." unique_id=1038204456]
+layout_mode = 0
+offset_right = 1080.0
+offset_bottom = 1920.0
+
+[node name="TopBar" type="PanelContainer" parent="RootLayout" unique_id=300855875]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7u77a")
+
+[node name="Label" type="Label" parent="RootLayout/TopBar" unique_id=2058188913]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Topbar"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PetArea" type="PanelContainer" parent="RootLayout" unique_id=2102730157]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jjgbg")
+
+[node name="Label" type="Label" parent="RootLayout/PetArea" unique_id=705995219]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "PetArea"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bo1nx")
+
+[node name="Label" type="Label" parent="RootLayout/NeedPanel" unique_id=1565321057]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "NeedPanel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionPanel" type="PanelContainer" parent="RootLayout" unique_id=1750072569]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8gbba")
+
+[node name="Label" type="Label" parent="RootLayout/ActionPanel" unique_id=2143174023]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "ActionPanel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottomNav" type="PanelContainer" parent="RootLayout" unique_id=1070485461]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jjvhh")
+
+[node name="Label" type="Label" parent="RootLayout/BottomNav" unique_id=1703136167]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "BottomNav"
+horizontal_alignment = 1
+vertical_alignment = 1
