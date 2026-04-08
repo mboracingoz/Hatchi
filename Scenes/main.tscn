@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://cf8880oauocta"]
 
+[ext_resource type="Script" uid="uid://cteujr11q1xgj" path="res://Core/ui/hunger_bar.gd" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://b7ok3fon2vgs7" path="res://Systems/Needs/need_system.gd" id="2_bo1nx"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
 bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
 
@@ -8,6 +11,9 @@ bg_color = Color(0.27110246, 0.2602791, 0.2151742, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bo1nx"]
 bg_color = Color(0.28485528, 0.5414254, 0.25359923, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kry3j"]
+bg_color = Color(0.31222314, 0.89679396, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gbba"]
 bg_color = Color(0.6298799, 0.025875766, 0.4792717, 1)
@@ -55,12 +61,15 @@ custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bo1nx")
 
-[node name="Label" type="Label" parent="RootLayout/NeedPanel" unique_id=1565321057]
+[node name="NeedsContainer" type="HBoxContainer" parent="RootLayout/NeedPanel" unique_id=1351172576]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "NeedPanel"
-horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="HungerBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=631897409]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/fill = SubResource("StyleBoxFlat_kry3j")
+value = 70.0
+script = ExtResource("1_jjgbg")
 
 [node name="ActionPanel" type="PanelContainer" parent="RootLayout" unique_id=1750072569]
 custom_minimum_size = Vector2(0, 180)
@@ -85,3 +94,6 @@ theme_override_font_sizes/font_size = 32
 text = "BottomNav"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
+script = ExtResource("2_bo1nx")
