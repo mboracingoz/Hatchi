@@ -19,8 +19,9 @@ func _ready() -> void:
 
 	need_system.hunger_changed.connect(_on_hunger_changed)
 
-	if need_system.hunger != null:
-		value = need_system.hunger.current_value
+	var hunger: NeedStat = need_system.needs.get("hunger")
+	if hunger != null:
+		value = hunger.current_value
 		print("Initial bar value: ", value)
 
 func _on_hunger_changed(new_value: float) -> void:
