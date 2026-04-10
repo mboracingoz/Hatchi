@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://fibo7r4yrk3o" path="res://Core/ui/Widgets/NeedBar.gd" id="1_bo1nx"]
 [ext_resource type="Script" uid="uid://b75mcftx0u248" path="res://Core/ui/Action/FeedButton.gd" id="2_8gbba"]
 [ext_resource type="Script" uid="uid://b7ok3fon2vgs7" path="res://Systems/Needs/need_system.gd" id="2_bo1nx"]
+[ext_resource type="Script" uid="uid://7aito1hxw1yw" path="res://Core/ui/Action/CuddlePet.gd" id="3_jjvhh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
 bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
@@ -106,7 +107,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_6bp64")
 value = 80.0
 show_percentage = false
 script = ExtResource("1_bo1nx")
-need_id = "happines"
+need_id = "happiness"
 
 [node name="SleepBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=356440126]
 custom_minimum_size = Vector2(0, 40)
@@ -135,12 +136,19 @@ layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Button" type="Button" parent="RootLayout/ActionPanel/ActionsContainer" unique_id=1412812904]
+[node name="FeedButton" type="Button" parent="RootLayout/ActionPanel/ActionsContainer" unique_id=1412812904]
 custom_minimum_size = Vector2(198.86, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_ynf5e")
 text = "FEED"
 script = ExtResource("2_8gbba")
+
+[node name="CuddlePetButton" type="Button" parent="RootLayout/ActionPanel/ActionsContainer" unique_id=1380565603]
+custom_minimum_size = Vector2(198.86, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ynf5e")
+text = "Cuddle"
+script = ExtResource("3_jjvhh")
 
 [node name="BottomNav" type="PanelContainer" parent="RootLayout" unique_id=1070485461]
 custom_minimum_size = Vector2(0, 120)

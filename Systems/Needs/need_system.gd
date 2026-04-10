@@ -40,15 +40,14 @@ func _ready() -> void:
 	_emit_hunger_changed()
 
 func _process(delta: float) -> void:
-	var hunger: NeedStat = needs.get("hunger")
-
-	if hunger == null:
-		return
-
-	var previous_value: float = hunger.current_value
-	hunger.decrease(delta)
-
-	if !is_equal_approx(previous_value, hunger.current_value):
+		for key in needs.keys():
+			var stat: NeedStat = needs[key]
+			
+			if stat == null:
+				continue
+			
+			stat.decrease(delta)
+	
 		_emit_hunger_changed()
 
 func feed(amount: float) -> void:
