@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://b75mcftx0u248" path="res://Core/ui/Action/FeedButton.gd" id="2_8gbba"]
 [ext_resource type="Script" uid="uid://b7ok3fon2vgs7" path="res://Systems/Needs/need_system.gd" id="2_bo1nx"]
 [ext_resource type="Script" uid="uid://7aito1hxw1yw" path="res://Core/ui/Action/CuddlePet.gd" id="3_jjvhh"]
+[ext_resource type="Script" uid="uid://bmse52rb3280l" path="res://Core/ui/Action/CleanButton.gd" id="4_21xkr"]
+[ext_resource type="Script" uid="uid://bkt4qxbfxga7m" path="res://Core/ui/Action/SleepButton.gd" id="5_6bp64"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
 bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
@@ -149,6 +151,20 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_ynf5e")
 text = "Cuddle"
 script = ExtResource("3_jjvhh")
+
+[node name="CleanButton" type="Button" parent="RootLayout/ActionPanel/ActionsContainer" unique_id=114001327]
+custom_minimum_size = Vector2(198.86, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ynf5e")
+text = "Clean"
+script = ExtResource("4_21xkr")
+
+[node name="SleepButton" type="Button" parent="RootLayout/ActionPanel/ActionsContainer" unique_id=400099451]
+custom_minimum_size = Vector2(198.86, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ynf5e")
+text = "Sleep"
+script = ExtResource("5_6bp64")
 
 [node name="BottomNav" type="PanelContainer" parent="RootLayout" unique_id=1070485461]
 custom_minimum_size = Vector2(0, 120)
