@@ -13,7 +13,16 @@ bg_color = Color(0.27110246, 0.2602791, 0.2151742, 1)
 bg_color = Color(0.28485528, 0.5414254, 0.25359923, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kry3j"]
-bg_color = Color(0.31222314, 0.89679396, 0, 1)
+bg_color = Color(0.77596754, 0.43093792, 0.1732994, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_21xkr"]
+bg_color = Color(0.073864035, 0.43213472, 0.8164918, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6bp64"]
+bg_color = Color(0.33509833, 0.054123245, 0.61379784, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_344ge"]
+bg_color = Color(1.8049032e-08, 0.19725004, 0.17686981, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gbba"]
 bg_color = Color(0.6298799, 0.025875766, 0.4792717, 1)
@@ -63,33 +72,45 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bo1nx")
 
 [node name="NeedsContainer" type="HBoxContainer" parent="RootLayout/NeedPanel" unique_id=1351172576]
 layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="HungerBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=631897409]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/fill = SubResource("StyleBoxFlat_kry3j")
 value = 70.0
+show_percentage = false
 script = ExtResource("1_bo1nx")
 need_id = "hunger"
 
 [node name="HygieneBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=1597484465]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_21xkr")
 value = 90.0
+show_percentage = false
 script = ExtResource("1_bo1nx")
 need_id = "hygiene"
 
 [node name="HappinesBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=1469228563]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_6bp64")
 value = 80.0
+show_percentage = false
 script = ExtResource("1_bo1nx")
 need_id = "happines"
 
 [node name="SleepBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=356440126]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_344ge")
 value = 85.0
+show_percentage = false
 script = ExtResource("1_bo1nx")
 need_id = "sleep"
 
