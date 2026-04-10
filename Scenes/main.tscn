@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cf8880oauocta"]
 
-[ext_resource type="Script" uid="uid://cteujr11q1xgj" path="res://Core/ui/hunger_bar.gd" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://fibo7r4yrk3o" path="res://Core/ui/Widgets/NeedBar.gd" id="1_bo1nx"]
 [ext_resource type="Script" uid="uid://b7ok3fon2vgs7" path="res://Systems/Needs/need_system.gd" id="2_bo1nx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
@@ -69,7 +69,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/fill = SubResource("StyleBoxFlat_kry3j")
 value = 70.0
-script = ExtResource("1_jjgbg")
+script = ExtResource("1_bo1nx")
+need_id = "hunger"
+
+[node name="HygieneBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=1597484465]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 90.0
+script = ExtResource("1_bo1nx")
+need_id = "hygiene"
+
+[node name="HappinesBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=1469228563]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 80.0
+script = ExtResource("1_bo1nx")
+need_id = "happines"
+
+[node name="SleepBar" type="ProgressBar" parent="RootLayout/NeedPanel/NeedsContainer" unique_id=356440126]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 85.0
+script = ExtResource("1_bo1nx")
+need_id = "sleep"
 
 [node name="ActionPanel" type="PanelContainer" parent="RootLayout" unique_id=1750072569]
 custom_minimum_size = Vector2(0, 180)

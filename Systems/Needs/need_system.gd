@@ -12,7 +12,31 @@ func _ready() -> void:
 	hunger.decay_per_second = 1.0
 
 	needs["hunger"] = hunger
-
+	
+	var happiness = NeedStat.new()
+	happiness.id = &"happiness"
+	happiness.max_value = 100.0
+	happiness.current_value = 80.0
+	happiness.decay_per_second = 0.5
+	
+	needs["happiness"] = happiness
+	
+	var hygiene = NeedStat.new()
+	hygiene.id = &"hygiene"
+	hygiene.max_value = 100.0
+	hygiene.current_value = 90.0
+	hygiene.decay_per_second = 0.3
+	
+	needs["hygiene"] = hygiene
+	
+	var sleep = NeedStat.new()
+	sleep.id = &"sleep"
+	sleep.max_value = 100.0
+	sleep.current_value = 75.0
+	sleep.decay_per_second = 0.2
+	
+	needs["sleep"] = sleep
+	
 	_emit_hunger_changed()
 
 func _process(delta: float) -> void:
