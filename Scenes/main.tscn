@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cf8880oauocta"]
 
 [ext_resource type="Script" uid="uid://fibo7r4yrk3o" path="res://Core/ui/Widgets/NeedBar.gd" id="1_bo1nx"]
+[ext_resource type="Script" uid="uid://b75mcftx0u248" path="res://Core/ui/Action/FeedButton.gd" id="2_8gbba"]
 [ext_resource type="Script" uid="uid://b7ok3fon2vgs7" path="res://Systems/Needs/need_system.gd" id="2_bo1nx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
@@ -26,6 +27,9 @@ bg_color = Color(1.8049032e-08, 0.19725004, 0.17686981, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gbba"]
 bg_color = Color(0.6298799, 0.025875766, 0.4792717, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
+bg_color = Color(0.14605942, 0.2466358, 9.62615e-08, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjvhh"]
 bg_color = Color(0.40655044, 0.2904154, 0.19331902, 1)
@@ -125,6 +129,18 @@ theme_override_font_sizes/font_size = 32
 text = "ActionPanel"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ActionsContainer" type="HBoxContainer" parent="RootLayout/ActionPanel" unique_id=577104991]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Button" type="Button" parent="RootLayout/ActionPanel/ActionsContainer" unique_id=1412812904]
+custom_minimum_size = Vector2(198.86, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ynf5e")
+text = "FEED"
+script = ExtResource("2_8gbba")
 
 [node name="BottomNav" type="PanelContainer" parent="RootLayout" unique_id=1070485461]
 custom_minimum_size = Vector2(0, 120)
