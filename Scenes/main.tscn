@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cf8880oauocta"]
 
+[ext_resource type="Script" uid="uid://bh2rh36pckf2e" path="res://Core/pet/PetStateController.gd" id="1_6bp64"]
 [ext_resource type="Script" uid="uid://fibo7r4yrk3o" path="res://Core/ui/Widgets/NeedBar.gd" id="1_bo1nx"]
 [ext_resource type="Script" uid="uid://b75mcftx0u248" path="res://Core/ui/Action/FeedButton.gd" id="2_8gbba"]
 [ext_resource type="Script" uid="uid://b7ok3fon2vgs7" path="res://Systems/Needs/need_system.gd" id="2_bo1nx"]
@@ -72,6 +73,12 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("state_label", "need_system")]
+layout_mode = 2
+script = ExtResource("1_6bp64")
+state_label = NodePath(".")
+need_system = NodePath("../../../NeedSystem")
+
 [node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
@@ -86,7 +93,7 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/fill = SubResource("StyleBoxFlat_kry3j")
-value = 70.0
+value = 20.0
 show_percentage = false
 script = ExtResource("1_bo1nx")
 need_id = "hunger"
@@ -96,7 +103,7 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/background = SubResource("StyleBoxFlat_21xkr")
-value = 90.0
+value = 20.0
 show_percentage = false
 script = ExtResource("1_bo1nx")
 need_id = "hygiene"
