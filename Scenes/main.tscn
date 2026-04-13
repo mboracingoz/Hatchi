@@ -73,10 +73,14 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("state_label", "need_system")]
+[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("state_label", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system")]
 layout_mode = 2
 script = ExtResource("1_6bp64")
 state_label = NodePath(".")
+feed_button = NodePath("../../ActionPanel/ActionsContainer/FeedButton")
+cuddle_button = NodePath("../../ActionPanel/ActionsContainer/CuddlePetButton")
+clean_button = NodePath("../../ActionPanel/ActionsContainer/CleanButton")
+sleep_button = NodePath("../../ActionPanel/ActionsContainer/SleepButton")
 need_system = NodePath("../../../NeedSystem")
 
 [node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]

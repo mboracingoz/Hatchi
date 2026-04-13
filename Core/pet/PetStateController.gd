@@ -10,6 +10,11 @@ const STATE_SLEEPING := &"sleeping"
 
 @export var state_label: Label
 
+@export var feed_button: Button
+@export var cuddle_button: Button
+@export var clean_button: Button
+@export var sleep_button: Button
+
 const LOW_THRESHOLD := 35.0
 const CRITICAL_THRESHOLD := 15.0
 
@@ -25,6 +30,8 @@ func _ready() -> void:
 	if state_label != null:
 		state_label.text = get_state_text(current_state)
 		state_label.modulate = get_state_color(current_state)
+	
+	update_action_buttons()
 
 func _process(_delta: float) -> void:
 	if need_system == null or not ("needs" in need_system):
@@ -75,6 +82,7 @@ func on_state_changed():
 	
 	if state_label == null:
 		return
+	update_action_buttons()
 	
 	state_label.text = get_state_text(current_state)
 	state_label.modulate = get_state_color(current_state)
@@ -125,6 +133,19 @@ func set_sleeping(value: bool) -> void:
 func toggle_sleep() -> void:
 	is_sleeping = not is_sleeping
 	print("Sleeping toggled (button): ", is_sleeping)
+
+func update_action_buttons() -> void:
+	if sleep_button !=null:
+		sleep_button.text = "Wake up" if is_sleeping else "sleep"
+	
+	if feed_button != null:
+		feed_button.disabled = is_sleeping
+	
+	if cuddle_button != null:
+		cuddle_button.disabled = is_sleeping
+	
+	if clean_button != null:
+		clean_button.disabled = is_sleeping
 
 # TEMP DEBUG INPUTS
 func _input(event: InputEvent) -> void:
