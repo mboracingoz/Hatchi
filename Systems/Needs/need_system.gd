@@ -24,7 +24,7 @@ func _ready() -> void:
 	var hygiene = NeedStat.new()
 	hygiene.id = &"hygiene"
 	hygiene.max_value = 100.0
-	hygiene.current_value = 90.0
+	hygiene.current_value = 20.0
 	hygiene.decay_per_second = 0.3
 	
 	needs["hygiene"] = hygiene

@@ -11,6 +11,8 @@ const STATE_SLEEPING := &"sleeping"
 @export var pet_area: Control
 @export var state_label: Label
 @export var sleep_label: Label
+@export var pet_visual: CanvasItem
+
 
 @export var feed_button: Button
 @export var cuddle_button: Button
@@ -49,6 +51,7 @@ func _ready() -> void:
 	update_action_buttons()
 	update_pet_visual()
 	update_sleep_label()
+	update_pet_state_visual()
 
 func _process(_delta: float) -> void:
 	if need_system == null or not ("needs" in need_system):
@@ -102,6 +105,7 @@ func on_state_changed():
 	update_action_buttons()
 	update_pet_visual()
 	update_sleep_label()
+	update_pet_state_visual()
 	
 	state_label.text = get_state_text(current_state)
 	state_label.modulate = get_state_color(current_state)
@@ -231,3 +235,24 @@ func _start_sleep_label_wander() -> void:
 	sleep_tween.tween_property(sleep_label, "position", target_position, 1.2)
 	sleep_tween.parallel().tween_property(sleep_label, "scale", target_scale, 1.2)
 	sleep_tween.finished.connect(_start_sleep_label_wander)
+
+
+func update_pet_state_visual() -> void:
+	if pet_visual == null:
+		return
+
+	match current_state:
+		STATE_NORMAL:
+			pet_visual.modulate = Color(1, 1, 1, 1)
+		STATE_HUNGRY:
+			pet_visual.modulate = Color(1.0, 0.92, 0.92, 1)
+		STATE_DIRTY:
+			pet_visual.modulate = Color(0.3, 0.3, 0.3, 1)
+		STATE_SLEEPY:
+			pet_visual.modulate = Color(0.88, 0.88, 1.0, 1)
+		STATE_SAD:
+			pet_visual.modulate = Color(0.9, 0.9, 1.0, 1)
+		STATE_CRITICAL:
+			pet_visual.modulate = Color(0.45, 0.0, 0.106, 1.0)
+		STATE_SLEEPING:
+			pet_visual.modulate = Color(0.75, 0.75, 0.9, 1)

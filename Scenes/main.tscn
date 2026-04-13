@@ -14,6 +14,8 @@ bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjgbg"]
 bg_color = Color(0.27110246, 0.2602791, 0.2151742, 1)
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6bp64"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bo1nx"]
 bg_color = Color(0.28485528, 0.5414254, 0.25359923, 1)
 
@@ -45,6 +47,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="SleepLabel" type="Label" parent="." unique_id=2039422072]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -92,17 +95,30 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system")]
+[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "pet_visual", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system")]
 layout_mode = 2
 script = ExtResource("1_6bp64")
 pet_area = NodePath("..")
 state_label = NodePath(".")
 sleep_label = NodePath("../../../SleepLabel")
+pet_visual = NodePath("../PetVisualLayer/PetVisual")
 feed_button = NodePath("../../ActionPanel/ActionsContainer/FeedButton")
 cuddle_button = NodePath("../../ActionPanel/ActionsContainer/CuddlePetButton")
 clean_button = NodePath("../../ActionPanel/ActionsContainer/CleanButton")
 sleep_button = NodePath("../../ActionPanel/ActionsContainer/SleepButton")
 need_system = NodePath("../../../NeedSystem")
+
+[node name="PetVisualLayer" type="Control" parent="RootLayout/PetArea" unique_id=522036572]
+clip_contents = true
+layout_mode = 2
+
+[node name="PetVisual" type="TextureRect" parent="RootLayout/PetArea/PetVisualLayer" unique_id=1104557754]
+layout_mode = 0
+offset_left = 409.0
+offset_top = 1032.0
+offset_right = 659.0
+offset_bottom = 1282.0
+texture = SubResource("PlaceholderTexture2D_6bp64")
 
 [node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]
 custom_minimum_size = Vector2(0, 160)
