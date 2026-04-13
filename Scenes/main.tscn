@@ -44,6 +44,25 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="SleepLabel" type="Label" parent="." unique_id=2039422072]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 975.0
+offset_right = 1060.0
+offset_bottom = 1020.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Zzz..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="RootLayout" type="VBoxContainer" parent="." unique_id=1038204456]
 layout_mode = 0
 offset_right = 1080.0
@@ -73,20 +92,12 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SleepLabel" type="Label" parent="RootLayout/PetArea" unique_id=2039422072]
-visible = false
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Zzz..."
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system")]
 layout_mode = 2
 script = ExtResource("1_6bp64")
 pet_area = NodePath("..")
 state_label = NodePath(".")
-sleep_label = NodePath("../SleepLabel")
+sleep_label = NodePath("../../../SleepLabel")
 feed_button = NodePath("../../ActionPanel/ActionsContainer/FeedButton")
 cuddle_button = NodePath("../../ActionPanel/ActionsContainer/CuddlePetButton")
 clean_button = NodePath("../../ActionPanel/ActionsContainer/CleanButton")

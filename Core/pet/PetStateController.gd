@@ -24,6 +24,11 @@ var current_state: StringName = STATE_NORMAL
 var previous_state: StringName = STATE_NORMAL
 
 var is_sleeping: bool = false
+var sleep_label_base_position: Vector2
+var sleep_tween: Tween
+var sleep_label_center_position: Vector2
+var sleep_label_move_range := Vector2(35, 18)
+var rng := RandomNumberGenerator.new()
 
 @export var need_system: Node
 
@@ -32,6 +37,14 @@ func _ready() -> void:
 	if state_label != null:
 		state_label.text = get_state_text(current_state)
 		state_label.modulate = get_state_color(current_state)
+	
+	if sleep_label != null:
+		sleep_label_base_position = sleep_label.position
+	
+	rng.randomize()
+
+	if sleep_label != null:
+		sleep_label_center_position = sleep_label.position
 	
 	update_action_buttons()
 	update_pet_visual()
@@ -179,3 +192,42 @@ func update_sleep_label() -> void:
 		return
 
 	sleep_label.visible = is_sleeping
+	
+	if is_sleeping:
+		play_sleep_label_animation()
+	else:
+		if sleep_tween != null:
+			sleep_tween.kill()
+			sleep_tween = null
+		sleep_label.position = sleep_label_center_position
+		sleep_label.scale = Vector2.ONE
+
+func play_sleep_label_animation() -> void:
+	if sleep_label == null:
+		return
+
+	if sleep_tween != null:
+		sleep_tween.kill()
+
+	_start_sleep_label_wander()
+
+
+func _start_sleep_label_wander() -> void:
+	if sleep_label == null or not is_sleeping:
+		return
+
+	var target_offset = Vector2(
+		rng.randf_range(-sleep_label_move_range.x, sleep_label_move_range.x),
+		rng.randf_range(-sleep_label_move_range.y, sleep_label_move_range.y)
+	)
+
+	var target_position = sleep_label_center_position + target_offset
+	var target_scale = Vector2.ONE * rng.randf_range(0.95, 1.08)
+
+	sleep_tween = create_tween()
+	sleep_tween.set_trans(Tween.TRANS_SINE)
+	sleep_tween.set_ease(Tween.EASE_IN_OUT)
+
+	sleep_tween.tween_property(sleep_label, "position", target_position, 1.2)
+	sleep_tween.parallel().tween_property(sleep_label, "scale", target_scale, 1.2)
+	sleep_tween.finished.connect(_start_sleep_label_wander)
