@@ -187,3 +187,5 @@ vertical_alignment = 1
 
 [node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
 script = ExtResource("2_bo1nx")
+
+[connection signal="pressed" from="RootLayout/ActionPanel/ActionsContainer/SleepButton" to="RootLayout/PetArea/StateLabel" method="toggle_sleep"]

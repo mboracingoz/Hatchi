@@ -119,6 +119,13 @@ func get_state_color(state: StringName) -> Color:
 		_:
 			return Color.WHITE
 
+func set_sleeping(value: bool) -> void:
+	is_sleeping = true
+
+func toggle_sleep() -> void:
+	is_sleeping = not is_sleeping
+	print("Sleeping toggled (button): ", is_sleeping)
+
 # TEMP DEBUG INPUTS
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
