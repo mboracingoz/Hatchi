@@ -16,6 +16,8 @@ const CRITICAL_THRESHOLD := 15.0
 var current_state: StringName = STATE_NORMAL
 var previous_state: StringName = STATE_NORMAL
 
+var is_sleeping: bool = false
+
 @export var need_system: Node
 
 
@@ -58,7 +60,14 @@ func calculate_state(needs: Dictionary) -> StringName:
 
 	if happiness <= LOW_THRESHOLD:
 		return STATE_SAD
-
+	
+	if is_sleeping:
+		return STATE_SLEEPING
+	
+	
+	if needs.is_empty():
+		return STATE_NORMAL
+	
 	return STATE_NORMAL
 
 func on_state_changed():
@@ -82,13 +91,13 @@ func get_state_text(state: StringName) -> String:
 		STATE_SLEEPY:
 			return "Sleep"
 		STATE_SAD:
-			return "It's want cuddle"
+			return "Needs Attention"
 		STATE_CRITICAL:
 			return "Critic"
 		STATE_SLEEPING:
 			return "Sleeping"
 		_:
-			return "I dont' know"
+			return "Unknown"
 
 
 func get_state_color(state: StringName) -> Color:
@@ -110,11 +119,12 @@ func get_state_color(state: StringName) -> Color:
 		_:
 			return Color.WHITE
 
-
+# TEMP DEBUG INPUTS
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		need_system.needs["hunger"].current_value = 20
-		print("Hunger forced to 20")
+	if event.is_action_pressed("ui_cancel"):
+		is_sleeping = not is_sleeping
+		print("Sleeping toggled: ", is_sleeping)
+		
 		
 		
 		
