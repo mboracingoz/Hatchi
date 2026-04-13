@@ -8,7 +8,9 @@ const STATE_SAD := &"sad"
 const STATE_CRITICAL := &"critical"
 const STATE_SLEEPING := &"sleeping"
 
+@export var pet_area: Control
 @export var state_label: Label
+@export var sleep_label: Label
 
 @export var feed_button: Button
 @export var cuddle_button: Button
@@ -32,6 +34,8 @@ func _ready() -> void:
 		state_label.modulate = get_state_color(current_state)
 	
 	update_action_buttons()
+	update_pet_visual()
+	update_sleep_label()
 
 func _process(_delta: float) -> void:
 	if need_system == null or not ("needs" in need_system):
@@ -83,6 +87,8 @@ func on_state_changed():
 	if state_label == null:
 		return
 	update_action_buttons()
+	update_pet_visual()
+	update_sleep_label()
 	
 	state_label.text = get_state_text(current_state)
 	state_label.modulate = get_state_color(current_state)
@@ -135,8 +141,9 @@ func toggle_sleep() -> void:
 	print("Sleeping toggled (button): ", is_sleeping)
 
 func update_action_buttons() -> void:
-	if sleep_button !=null:
-		sleep_button.text = "Wake up" if is_sleeping else "sleep"
+	if sleep_button != null:
+		sleep_button.disabled = false
+		sleep_button.text = "Wake" if is_sleeping else "Sleep"
 	
 	if feed_button != null:
 		feed_button.disabled = is_sleeping
@@ -156,3 +163,19 @@ func _input(event: InputEvent) -> void:
 		
 		
 		
+
+func update_pet_visual() -> void:
+	if pet_area == null:
+		return
+	
+	if is_sleeping:
+		pet_area.modulate = Color(1.143, 1.001, 2.879, 1.0)
+	else:
+		pet_area.modulate = Color(1,1,1)
+
+
+func update_sleep_label() -> void:
+	if sleep_label == null:
+		return
+
+	sleep_label.visible = is_sleeping

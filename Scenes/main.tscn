@@ -73,10 +73,20 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("state_label", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system")]
+[node name="SleepLabel" type="Label" parent="RootLayout/PetArea" unique_id=2039422072]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Zzz..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system")]
 layout_mode = 2
 script = ExtResource("1_6bp64")
+pet_area = NodePath("..")
 state_label = NodePath(".")
+sleep_label = NodePath("../SleepLabel")
 feed_button = NodePath("../../ActionPanel/ActionsContainer/FeedButton")
 cuddle_button = NodePath("../../ActionPanel/ActionsContainer/CuddlePetButton")
 clean_button = NodePath("../../ActionPanel/ActionsContainer/CleanButton")
