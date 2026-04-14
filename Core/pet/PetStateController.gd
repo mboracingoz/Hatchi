@@ -32,6 +32,8 @@ var sleep_label_center_position: Vector2
 var sleep_label_move_range := Vector2(35, 18)
 var rng := RandomNumberGenerator.new()
 
+var pet_visual_tween: Tween
+
 @export var need_system: Node
 
 
@@ -52,6 +54,7 @@ func _ready() -> void:
 	update_pet_visual()
 	update_sleep_label()
 	update_pet_state_visual()
+	update_pet_state_reaction()
 
 func _process(_delta: float) -> void:
 	if need_system == null or not ("needs" in need_system):
@@ -106,6 +109,7 @@ func on_state_changed():
 	update_pet_visual()
 	update_sleep_label()
 	update_pet_state_visual()
+	update_pet_state_reaction()
 	
 	state_label.text = get_state_text(current_state)
 	state_label.modulate = get_state_color(current_state)
@@ -256,3 +260,34 @@ func update_pet_state_visual() -> void:
 			pet_visual.modulate = Color(0.45, 0.0, 0.106, 1.0)
 		STATE_SLEEPING:
 			pet_visual.modulate = Color(0.75, 0.75, 0.9, 1)
+
+
+func update_pet_state_reaction() -> void:
+	if pet_visual == null:
+		return
+
+	if pet_visual_tween != null:
+		pet_visual_tween.kill()
+
+	var target_scale := Vector2.ONE
+
+	match current_state:
+		STATE_NORMAL:
+			target_scale = Vector2(1.0, 1.0)
+		STATE_HUNGRY:
+			target_scale = Vector2(0.96, 0.96)
+		STATE_DIRTY:
+			target_scale = Vector2(0.94, 0.94)
+		STATE_SLEEPY:
+			target_scale = Vector2(0.95, 0.95)
+		STATE_SAD:
+			target_scale = Vector2(0.93, 0.93)
+		STATE_CRITICAL:
+			target_scale = Vector2(0.90, 0.90)
+		STATE_SLEEPING:
+			target_scale = Vector2(0.92, 0.92)
+
+	pet_visual_tween = create_tween()
+	pet_visual_tween.set_trans(Tween.TRANS_SINE)
+	pet_visual_tween.set_ease(Tween.EASE_OUT)
+	pet_visual_tween.tween_property(pet_visual, "scale", target_scale, 0.18)
