@@ -35,6 +35,7 @@ var rng := RandomNumberGenerator.new()
 var sleep_tween: Tween
 var pet_visual_tween: Tween
 var breathing_tween: Tween
+var critical_tween: Tween
 var is_sleeping: bool = false
 
 
@@ -122,6 +123,18 @@ func on_state_changed():
 		start_breathing_animation()
 	else:
 		stop_breathing_animation()
+	
+	if current_state == STATE_SLEEPING:
+		stop_critical_pulse()
+		start_breathing_animation()
+
+	elif current_state == STATE_CRITICAL:
+		stop_breathing_animation()
+		start_critical_pulse()
+
+	else:
+		stop_breathing_animation()
+		stop_critical_pulse()
 
 
 func get_state_text(state: StringName) -> String:
@@ -325,3 +338,25 @@ func stop_breathing_animation() -> void:
 	
 	if pet_visual != null:
 		pet_visual.scale = Vector2.ONE
+
+func start_critical_pulse() -> void:
+	if pet_visual == null:
+		return
+	
+	if critical_tween != null:
+		critical_tween.kill()
+	
+	
+	critical_tween = create_tween()
+	critical_tween.set_loops()
+	
+	critical_tween.set_trans(Tween.TRANS_SINE)
+	critical_tween.set_ease(Tween.EASE_IN_OUT)
+	
+	critical_tween.tween_property(pet_visual, "scale", Vector2(1.08, 1.08), 0.25)
+	critical_tween.tween_property(pet_visual, "scale", Vector2(0.92, 0.92), 0.25)
+
+func stop_critical_pulse() -> void:
+	if critical_tween != null:
+		critical_tween.kill()
+		critical_tween = null
