@@ -25,14 +25,18 @@ const CRITICAL_THRESHOLD := 15.0
 var current_state: StringName = STATE_NORMAL
 var previous_state: StringName = STATE_NORMAL
 
-var is_sleeping: bool = false
 var sleep_label_base_position: Vector2
-var sleep_tween: Tween
 var sleep_label_center_position: Vector2
 var sleep_label_move_range := Vector2(35, 18)
 var rng := RandomNumberGenerator.new()
 
+
+
+var sleep_tween: Tween
 var pet_visual_tween: Tween
+var breathing_tween: Tween
+var is_sleeping: bool = false
+
 
 @export var need_system: Node
 
@@ -113,6 +117,11 @@ func on_state_changed():
 	
 	state_label.text = get_state_text(current_state)
 	state_label.modulate = get_state_color(current_state)
+	
+	if current_state == STATE_SLEEPING:
+		start_breathing_animation()
+	else:
+		stop_breathing_animation()
 
 
 func get_state_text(state: StringName) -> String:
@@ -291,3 +300,28 @@ func update_pet_state_reaction() -> void:
 	pet_visual_tween.set_trans(Tween.TRANS_SINE)
 	pet_visual_tween.set_ease(Tween.EASE_OUT)
 	pet_visual_tween.tween_property(pet_visual, "scale", target_scale, 0.18)
+
+func start_breathing_animation() -> void:
+	if pet_visual == null:
+		return
+	
+	if breathing_tween != null:
+		breathing_tween.kill()
+	
+	breathing_tween = create_tween()
+	breathing_tween.set_loops()
+	
+	breathing_tween.set_trans(Tween.TRANS_SINE)
+	breathing_tween.set_ease(Tween.EASE_IN_OUT)
+	
+	breathing_tween.tween_property(pet_visual, "scale", Vector2(0.95, 0.95), 1.2)
+	breathing_tween.tween_property(pet_visual, "scale", Vector2(1.0, 1.0), 1.2)
+
+
+func stop_breathing_animation() -> void:
+	if breathing_tween != null:
+		breathing_tween.kill()
+		breathing_tween = null
+	
+	if pet_visual != null:
+		pet_visual.scale = Vector2.ONE
