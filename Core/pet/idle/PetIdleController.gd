@@ -114,11 +114,13 @@ func _play_idle_pulse() -> void:
 	_idle_tween.finished.connect(_on_idle_finished)
 
 func _play_idle_squish() -> void:
+	var x = randf_range(1.08, 1.14)
+	var y = randf_range(0.86, 0.92)
+	var squish_scale = Vector2(x, y)
 	_idle_tween = create_tween()
 	_idle_tween.set_trans(Tween.TRANS_SINE)
 	_idle_tween.set_ease(Tween.EASE_IN_OUT)
 
-	var squish_scale = Vector2(1.12, 0.88)
 
 	_idle_tween.tween_property(
 		pet_visual,
