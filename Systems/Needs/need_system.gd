@@ -8,7 +8,7 @@ func _ready() -> void:
 	var hunger = NeedStat.new()
 	hunger.id = &"hunger"
 	hunger.max_value = 100.0
-	hunger.current_value = 70.0
+	hunger.current_value = 10.0
 	hunger.decay_per_second = 1.0
 
 	needs["hunger"] = hunger
@@ -24,7 +24,7 @@ func _ready() -> void:
 	var hygiene = NeedStat.new()
 	hygiene.id = &"hygiene"
 	hygiene.max_value = 100.0
-	hygiene.current_value = 10.0
+	hygiene.current_value = 85.0
 	hygiene.decay_per_second = 0.3
 	
 	needs["hygiene"] = hygiene

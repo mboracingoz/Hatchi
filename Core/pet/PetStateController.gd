@@ -73,17 +73,26 @@ func _process(_delta: float) -> void:
 		on_state_changed()
 
 func calculate_state(needs: Dictionary) -> StringName:
+	if needs.is_empty():
+		return STATE_NORMAL
+
 	var hunger = needs.get("hunger").current_value
 	var hygiene = needs.get("hygiene").current_value
 	var happiness = needs.get("happiness").current_value
 	var sleep = needs.get("sleep").current_value
 
+	# Sleeping can override everything except critical hunger.
+	if is_sleeping and hunger > CRITICAL_THRESHOLD:
+		return STATE_SLEEPING
+
+	# Critical states
 	if hunger <= CRITICAL_THRESHOLD \
 	or hygiene <= CRITICAL_THRESHOLD \
 	or happiness <= CRITICAL_THRESHOLD \
 	or sleep <= CRITICAL_THRESHOLD:
 		return STATE_CRITICAL
 
+	# Low states
 	if hunger <= LOW_THRESHOLD:
 		return STATE_HUNGRY
 
@@ -95,47 +104,37 @@ func calculate_state(needs: Dictionary) -> StringName:
 
 	if happiness <= LOW_THRESHOLD:
 		return STATE_SAD
-	
-	if is_sleeping:
-		return STATE_SLEEPING
-	
-	
-	if needs.is_empty():
-		return STATE_NORMAL
-	
+
 	return STATE_NORMAL
+
 
 func on_state_changed():
 	print("State changed: ", previous_state, " -> ", current_state)
-	
-	if state_label == null:
-		return
+
 	update_action_buttons()
 	update_pet_visual()
 	update_sleep_label()
 	update_pet_state_visual()
 	update_pet_state_reaction()
-	
-	state_label.text = get_state_text(current_state)
-	state_label.modulate = get_state_color(current_state)
-	
-	if current_state == STATE_SLEEPING:
-		start_breathing_animation()
-	else:
-		stop_breathing_animation()
-	
-	if current_state == STATE_SLEEPING:
-		stop_critical_pulse()
-		start_breathing_animation()
+	update_state_animations()
 
-	elif current_state == STATE_CRITICAL:
-		stop_breathing_animation()
-		start_critical_pulse()
+	if state_label != null:
+		state_label.text = get_state_text(current_state)
+		state_label.modulate = get_state_color(current_state)
 
-	else:
-		stop_breathing_animation()
-		stop_critical_pulse()
-
+func update_action_buttons() -> void:
+	if sleep_button == null:
+		sleep_button.disabled = false
+		sleep_button.text = "Wake" if is_sleeping else "Sleep"
+		
+	if feed_button != null:
+		feed_button.disabled = is_sleeping
+	
+	if cuddle_button != null:
+		cuddle_button.disabled = is_sleeping
+	
+	if clean_button != null:
+		clean_button.disabled = is_sleeping
 
 func get_state_text(state: StringName) -> String:
 	match state:
@@ -146,11 +145,11 @@ func get_state_text(state: StringName) -> String:
 		STATE_DIRTY:
 			return "Dirty"
 		STATE_SLEEPY:
-			return "Sleep"
+			return "Sleepy"
 		STATE_SAD:
 			return "Needs Attention"
 		STATE_CRITICAL:
-			return "Critic"
+			return "Critical!"
 		STATE_SLEEPING:
 			return "Sleeping"
 		_:
@@ -177,35 +176,45 @@ func get_state_color(state: StringName) -> Color:
 			return Color.WHITE
 
 func set_sleeping(value: bool) -> void:
-	is_sleeping = true
+	is_sleeping = value
+
 
 func toggle_sleep() -> void:
-	is_sleeping = not is_sleeping
+	if need_system == null or not ("needs" in need_system):
+		return
+
+	var hunger = need_system.needs["hunger"].current_value
+
+	# Wake up if already sleeping
+	if is_sleeping:
+		is_sleeping = false
+		print("Woke up")
+		return
+
+	# Cannot sleep if hunger is critical
+	if hunger <= CRITICAL_THRESHOLD:
+		print("Too hungry to sleep")
+		return
+
+	is_sleeping = true
 	print("Sleeping toggled (button): ", is_sleeping)
 
-func update_action_buttons() -> void:
-	if sleep_button != null:
-		sleep_button.disabled = false
-		sleep_button.text = "Wake" if is_sleeping else "Sleep"
-	
-	if feed_button != null:
-		feed_button.disabled = is_sleeping
-	
-	if cuddle_button != null:
-		cuddle_button.disabled = is_sleeping
-	
-	if clean_button != null:
-		clean_button.disabled = is_sleeping
+
+func update_state_animations() -> void:
+	stop_breathing_animation()
+	stop_critical_pulse()
+
+	if current_state == STATE_SLEEPING:
+		start_breathing_animation()
+	elif current_state == STATE_CRITICAL:
+		start_critical_pulse()
 
 # TEMP DEBUG INPUTS
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		is_sleeping = not is_sleeping
 		print("Sleeping toggled: ", is_sleeping)
-		
-		
-		
-		
+
 
 func update_pet_visual() -> void:
 	if pet_area == null:
