@@ -11,8 +11,8 @@ const STATE_SLEEPING := &"sleeping"
 @export var pet_area: Control
 @export var state_label: Label
 @export var sleep_label: Label
+@export var sleep_warning_label: Label
 @export var pet_visual: CanvasItem
-
 
 @export var feed_button: Button
 @export var cuddle_button: Button
@@ -29,7 +29,7 @@ var sleep_label_base_position: Vector2
 var sleep_label_center_position: Vector2
 var sleep_label_move_range := Vector2(35, 18)
 var rng := RandomNumberGenerator.new()
-
+var warning_tween: Tween
 
 
 var sleep_tween: Tween
@@ -195,7 +195,7 @@ func toggle_sleep() -> void:
 
 	# Cannot sleep if hunger is critical
 	if hunger <= CRITICAL_THRESHOLD:
-		print("Too hungry to sleep")
+		show_sleep_warning("Too hungry to sleep")
 		return
 
 	is_sleeping = true
@@ -386,3 +386,29 @@ func play_action_reaction(strength: float = 1.1) -> void:
 	
 	action_tween.tween_property(pet_visual, "scale", Vector2(strength, strength), 0.12)
 	action_tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.18)
+
+func show_sleep_warning(text: String) -> void:
+	if sleep_warning_label == null:
+		return
+
+	if warning_tween != null:
+		warning_tween.kill()
+
+	sleep_warning_label.text = text
+	sleep_warning_label.visible = true
+	sleep_warning_label.modulate.a = 1.0
+
+	var start_pos = Vector2(0, 221)
+	var end_pos = start_pos + Vector2(0, -25)
+
+	warning_tween = create_tween()
+	warning_tween.set_trans(Tween.TRANS_SINE)
+	warning_tween.set_ease(Tween.EASE_IN_OUT)
+
+	warning_tween.tween_property(sleep_warning_label, "position", end_pos, 1.0)
+	warning_tween.parallel().tween_property(sleep_warning_label, "modulate:a", 0.0, 0.6)
+
+	warning_tween.tween_callback(func():
+		sleep_warning_label.visible = false
+		sleep_warning_label.position = start_pos
+	)

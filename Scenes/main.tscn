@@ -95,12 +95,13 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "pet_visual", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system") groups=["pet_state_controller"]]
+[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "sleep_warning_label", "pet_visual", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system") groups=["pet_state_controller"]]
 layout_mode = 2
 script = ExtResource("1_6bp64")
 pet_area = NodePath("..")
 state_label = NodePath(".")
 sleep_label = NodePath("../../../SleepLabel")
+sleep_warning_label = NodePath("../SleepWarningLabel")
 pet_visual = NodePath("../PetVisualLayer/PetVisual")
 feed_button = NodePath("../../ActionPanel/ActionsContainer/FeedButton")
 cuddle_button = NodePath("../../ActionPanel/ActionsContainer/CuddlePetButton")
@@ -119,6 +120,12 @@ offset_top = 1032.0
 offset_right = 659.0
 offset_bottom = 1282.0
 texture = SubResource("PlaceholderTexture2D_6bp64")
+
+[node name="SleepWarningLabel" type="Label" parent="RootLayout/PetArea" unique_id=1626317937]
+z_index = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
 
 [node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]
 custom_minimum_size = Vector2(0, 160)
