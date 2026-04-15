@@ -41,6 +41,9 @@ var is_sleeping: bool = false
 #Action Tweens
 var action_tween: Tween
 
+#State Text
+var state_text_tween: Tween
+
 @export var need_system: Node
 
 
@@ -123,6 +126,7 @@ func on_state_changed():
 	if state_label != null:
 		state_label.text = get_state_text(current_state)
 		state_label.modulate = get_state_color(current_state)
+		play_state_text_feedback()
 
 func update_action_buttons() -> void:
 	if sleep_button == null:
@@ -374,6 +378,9 @@ func stop_critical_pulse() -> void:
 
 
 func play_action_reaction(strength: float = 1.1) -> void:
+	stop_breathing_animation()
+	stop_critical_pulse()
+	
 	if pet_visual == null:
 		return
 	
@@ -386,6 +393,7 @@ func play_action_reaction(strength: float = 1.1) -> void:
 	
 	action_tween.tween_property(pet_visual, "scale", Vector2(strength, strength), 0.12)
 	action_tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.18)
+	action_tween.tween_callback(func():update_state_animations())
 
 func show_sleep_warning(text: String) -> void:
 	if sleep_warning_label == null:
@@ -412,3 +420,20 @@ func show_sleep_warning(text: String) -> void:
 		sleep_warning_label.visible = false
 		sleep_warning_label.position = start_pos
 	)
+
+func play_state_text_feedback() -> void:
+	if state_label == null:
+		return
+
+	if state_text_tween != null:
+		state_text_tween.kill()
+
+	state_label.scale = Vector2.ONE
+	state_label.modulate.a = 1.0
+
+	state_text_tween = create_tween()
+	state_text_tween.set_trans(Tween.TRANS_BACK)
+	state_text_tween.set_ease(Tween.EASE_OUT)
+
+	state_text_tween.tween_property(state_label, "scale", Vector2(1.15, 1.15), 0.12)
+	state_text_tween.tween_property(state_label, "scale", Vector2.ONE, 0.18)
