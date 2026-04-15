@@ -38,6 +38,8 @@ var breathing_tween: Tween
 var critical_tween: Tween
 var is_sleeping: bool = false
 
+#Action Tweens
+var action_tween: Tween
 
 @export var need_system: Node
 
@@ -369,3 +371,18 @@ func stop_critical_pulse() -> void:
 	if critical_tween != null:
 		critical_tween.kill()
 		critical_tween = null
+
+
+func play_action_reaction(strength: float = 1.1) -> void:
+	if pet_visual == null:
+		return
+	
+	if action_tween != null:
+		action_tween.kill()
+	
+	action_tween = create_tween()
+	action_tween.set_trans(Tween.TRANS_BACK)
+	action_tween.set_ease(Tween.EASE_IN_OUT)
+	
+	action_tween.tween_property(pet_visual, "scale", Vector2(strength, strength), 0.12)
+	action_tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.18)
