@@ -1,4 +1,5 @@
 extends Node
+class_name  PetStateController
 
 const STATE_NORMAL := &"normal"
 const STATE_HUNGRY := &"hungry"
@@ -87,8 +88,11 @@ func calculate_state(needs: Dictionary) -> StringName:
 	var sleep = needs.get("sleep").current_value
 
 	# Sleeping can override everything except critical hunger.
-	if is_sleeping and hunger > CRITICAL_THRESHOLD:
-		return STATE_SLEEPING
+	if is_sleeping:
+		if hunger > CRITICAL_THRESHOLD:
+			return STATE_SLEEPING
+		
+		is_sleeping = false
 
 	# Critical states
 	if hunger <= CRITICAL_THRESHOLD \
@@ -129,7 +133,7 @@ func on_state_changed():
 		play_state_text_feedback()
 
 func update_action_buttons() -> void:
-	if sleep_button == null:
+	if sleep_button != null:
 		sleep_button.disabled = false
 		sleep_button.text = "Wake" if is_sleeping else "Sleep"
 		

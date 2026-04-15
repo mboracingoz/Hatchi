@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://7aito1hxw1yw" path="res://Core/ui/Action/CuddlePet.gd" id="3_jjvhh"]
 [ext_resource type="Script" uid="uid://bmse52rb3280l" path="res://Core/ui/Action/CleanButton.gd" id="4_21xkr"]
 [ext_resource type="Script" uid="uid://bkt4qxbfxga7m" path="res://Core/ui/Action/SleepButton.gd" id="5_6bp64"]
+[ext_resource type="Script" uid="uid://bqyhviq76q8kb" path="res://Core/pet/idle/PetIdleController.gd" id="8_344ge"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
 bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
@@ -235,5 +236,10 @@ vertical_alignment = 1
 
 [node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
 script = ExtResource("2_bo1nx")
+
+[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller")]
+script = ExtResource("8_344ge")
+pet_visual = NodePath("../RootLayout/PetArea/PetVisualLayer/PetVisual")
+pet_state_controller = NodePath("../RootLayout/PetArea/StateLabel")
 
 [connection signal="pressed" from="RootLayout/ActionPanel/ActionsContainer/SleepButton" to="RootLayout/PetArea/StateLabel" method="toggle_sleep"]
