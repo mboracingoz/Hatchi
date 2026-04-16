@@ -15,8 +15,9 @@ class_name PetIdleController
 @export var idle_squish_duration: float = 0.28
 @export var idle_look_duration: float = 0.20
 @export var idle_interval_jitter: float = 0.8
-@export var idle_self_event_chance: float = 0.05
-
+@export var idle_self_event_chance: float = 0.4
+@export var idle_event_label: Label
+	
 var _idle_tween: Tween
 var _is_idle_playing: bool = false
 var _last_idle_type: StringName = &""
@@ -139,7 +140,7 @@ func _play_idle_pulse() -> void:
 	_idle_tween.tween_property(
 		pet_visual,
 		"scale",
-		Vector2.ONE * idle_pulse_scale_min,
+		Vector2.ONE * random_scale,
 		idle_pulse_duration
 	)
 	_idle_tween.tween_property(
@@ -215,6 +216,18 @@ func notify_action_performed() -> void:
 func _trigger_idle_event() -> void:
 	print("Pet self event triggered")
 
+	_show_idle_event("...")
+
+	var bubble_tween = create_tween()
+	bubble_tween.set_trans(Tween.TRANS_SINE)
+	bubble_tween.set_ease(Tween.EASE_IN_OUT)
+
+	bubble_tween.tween_interval(1.0)
+	bubble_tween.tween_property(idle_event_label, "modulate:a", 0.0, 0.25)
+	bubble_tween.tween_callback(func():
+		idle_event_label.visible = false
+	)
+
 func _get_state_idle_strength() -> float:
 	match pet_state_controller.current_state:
 		PetStateController.STATE_NORMAL:
@@ -237,3 +250,11 @@ func stop_idle_immediately() -> void:
 	
 	if pet_visual != null:
 		pet_visual.scale = Vector2.ONE
+
+func _show_idle_event(text: String) -> void:
+	if idle_event_label == null:
+		return
+
+	idle_event_label.text = text
+	idle_event_label.visible = true
+	idle_event_label.modulate.a = 1.0

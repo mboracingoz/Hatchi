@@ -123,11 +123,30 @@ offset_right = 659.0
 offset_bottom = 1282.0
 texture = SubResource("PlaceholderTexture2D_6bp64")
 
+[node name="BubbleAnchor" type="Control" parent="RootLayout/PetArea/PetVisualLayer" unique_id=1712101278]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="SleepWarningLabel" type="Label" parent="RootLayout/PetArea" unique_id=1626317937]
 z_index = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
+
+[node name="IdleEventUI" type="Control" parent="RootLayout/PetArea" unique_id=1518773019]
+layout_mode = 2
+
+[node name="IdleEventLabel" type="Label" parent="RootLayout/PetArea/IdleEventUI" unique_id=317699046]
+visible = false
+layout_mode = 0
+offset_left = 506.0
+offset_top = 948.0
+offset_right = 546.0
+offset_bottom = 971.0
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]
 custom_minimum_size = Vector2(0, 160)
@@ -238,9 +257,10 @@ vertical_alignment = 1
 [node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
 script = ExtResource("2_bo1nx")
 
-[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller")]
+[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller", "idle_event_label")]
 script = ExtResource("8_344ge")
 pet_visual = NodePath("../RootLayout/PetArea/PetVisualLayer/PetVisual")
 pet_state_controller = NodePath("../RootLayout/PetArea/StateLabel")
+idle_event_label = NodePath("../RootLayout/PetArea/IdleEventUI/IdleEventLabel")
 
 [connection signal="pressed" from="RootLayout/ActionPanel/ActionsContainer/SleepButton" to="RootLayout/PetArea/StateLabel" method="toggle_sleep"]
