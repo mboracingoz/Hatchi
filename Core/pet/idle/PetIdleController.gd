@@ -19,6 +19,8 @@ var _idle_tween: Tween
 var _is_idle_playing: bool = false
 
 #TİMER
+@export var idle_cooldown_after_action: float = 2.0
+var _idle_cooldown_timer: float = 0.0
 var _idle_timer: float = 0.0
 var _current_idle_interval: float = 0.0
 
@@ -33,6 +35,9 @@ func _reset_idle_timer() -> void:
 
 
 func _process(delta: float) -> void:
+	if _idle_cooldown_timer > 0.0:
+		_idle_cooldown_timer -= delta
+	
 	if not process_enabled:
 		return
 	
@@ -52,6 +57,9 @@ func _process(delta: float) -> void:
 
 func _can_run_idle() -> bool:
 	if _is_idle_playing:
+		return false
+	
+	if _idle_cooldown_timer > 0.0:
 		return false
 	
 	if pet_visual == null or pet_state_controller == null:
@@ -158,3 +166,6 @@ func _play_idle_look() -> void:
 	)
 
 	_idle_tween.finished.connect(_on_idle_finished)
+
+func notify_action_parameter() -> void:
+	_idle_cooldown_timer = idle_cooldown_after_action
