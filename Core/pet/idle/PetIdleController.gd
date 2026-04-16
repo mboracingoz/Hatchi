@@ -225,15 +225,38 @@ func _trigger_idle_event() -> void:
 	var symbol = _idle_event_symbols.pick_random()
 	_show_idle_event(symbol)
 
+	var duration := 1.0
+
+	if symbol.find("!") != -1:
+		duration = 2.2
+	elif symbol.find("❤") != -1:
+		duration = 2.3
+
 	var bubble_tween = create_tween()
 	bubble_tween.set_trans(Tween.TRANS_SINE)
-	bubble_tween.set_ease(Tween.EASE_IN_OUT)
+	bubble_tween.set_ease(Tween.EASE_OUT)
 
-	bubble_tween.tween_interval(1.0)
-	bubble_tween.tween_property(idle_event_label, "modulate:a", 0.0, 0.25)
+	var start_pos = idle_event_label.position
+	var end_pos = start_pos + Vector2(0, -20)
+
+	bubble_tween.parallel().tween_property(
+		idle_event_label,
+		"position",
+		end_pos,
+		duration
+	)
+
+	bubble_tween.parallel().tween_property(
+		idle_event_label,
+		"modulate:a",
+		0.0,
+		duration
+)
+
 	bubble_tween.tween_callback(func():
 		idle_event_label.visible = false
-	)
+		idle_event_label.position = start_pos
+)
 
 func _get_state_idle_strength() -> float:
 	match pet_state_controller.current_state:
