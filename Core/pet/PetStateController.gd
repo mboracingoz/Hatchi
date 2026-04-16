@@ -133,6 +133,9 @@ func on_state_changed():
 		state_label.text = get_state_text(current_state)
 		state_label.modulate = get_state_color(current_state)
 		play_state_text_feedback()
+	
+	if pet_idle_controller != null:
+		pet_idle_controller.stop_idle_immediately()
 
 func update_action_buttons() -> void:
 	if sleep_button != null:
@@ -384,6 +387,9 @@ func stop_critical_pulse() -> void:
 
 
 func play_action_reaction(strength: float = 1.1) -> void:
+	if pet_idle_controller != null:
+		pet_idle_controller.stop_idle_immediately()
+	
 	stop_breathing_animation()
 	stop_critical_pulse()
 	

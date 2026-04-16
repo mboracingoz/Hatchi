@@ -217,3 +217,13 @@ func _get_state_idle_strength() -> float:
 			return 1.2
 		_:
 			return 0.5
+
+func stop_idle_immediately() -> void:
+	if _idle_tween != null:
+		_idle_tween.kill()
+		_idle_tween = null
+	
+	_is_idle_playing = false
+	
+	if pet_visual != null:
+		pet_visual.scale = Vector2.ONE
