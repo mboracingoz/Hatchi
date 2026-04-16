@@ -137,14 +137,15 @@ horizontal_alignment = 1
 [node name="IdleEventUI" type="Control" parent="RootLayout/PetArea" unique_id=1518773019]
 layout_mode = 2
 
-[node name="IdleEventLabel" type="Label" parent="RootLayout/PetArea/IdleEventUI" unique_id=317699046]
-visible = false
+[node name="IdleEventLabel" type="RichTextLabel" parent="RootLayout/PetArea/IdleEventUI" unique_id=1423952790]
 layout_mode = 0
-offset_left = 506.0
-offset_top = 948.0
-offset_right = 546.0
-offset_bottom = 971.0
-text = "..."
+offset_left = 516.0
+offset_top = 946.0
+offset_right = 556.0
+offset_bottom = 986.0
+theme_override_font_sizes/normal_font_size = 22
+theme_override_font_sizes/bold_font_size = 22
+bbcode_enabled = true
 horizontal_alignment = 1
 vertical_alignment = 1
 

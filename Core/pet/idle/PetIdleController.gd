@@ -16,11 +16,17 @@ class_name PetIdleController
 @export var idle_look_duration: float = 0.20
 @export var idle_interval_jitter: float = 0.8
 @export var idle_self_event_chance: float = 0.4
-@export var idle_event_label: Label
+@export var idle_event_label: RichTextLabel
 	
 var _idle_tween: Tween
 var _is_idle_playing: bool = false
 var _last_idle_type: StringName = &""
+
+var _idle_event_symbols := [
+	"[color=green]...[/color]",
+	"[color=yellow]![/color]",
+	"[color=red]❤[/color]"
+]
 
 #TİMER
 @export var idle_cooldown_after_action: float = 2.0
@@ -216,7 +222,8 @@ func notify_action_performed() -> void:
 func _trigger_idle_event() -> void:
 	print("Pet self event triggered")
 
-	_show_idle_event("...")
+	var symbol = _idle_event_symbols.pick_random()
+	_show_idle_event(symbol)
 
 	var bubble_tween = create_tween()
 	bubble_tween.set_trans(Tween.TRANS_SINE)
@@ -255,6 +262,7 @@ func _show_idle_event(text: String) -> void:
 	if idle_event_label == null:
 		return
 
-	idle_event_label.text = text
+	idle_event_label.clear()
+	idle_event_label.append_text(text)
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 1.0
