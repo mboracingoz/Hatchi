@@ -12,6 +12,7 @@ class_name PetIdleController
 @export var idle_pulse_scale: float = 1.03
 @export  var idle_pulse_duration: float = 0.22
 @export var idle_squish_duration: float = 0.28
+@export var idle_look_duration: float = 0.20
 
 var _idle_tween: Tween
 var _is_idle_playing: bool = false
@@ -24,7 +25,8 @@ var _current_idle_interval: float = 0.0
 #Enums
 enum IdleType{
 	PULSE,
-	SQUISH
+	SQUISH,
+	LOOK
 }
 
 
@@ -85,6 +87,8 @@ func _trigger_idle() -> void:
 			_play_idle_pulse()
 		IdleType.SQUISH:
 			_play_idle_squish()
+		IdleType.LOOK:
+			_play_idle_look()
 
 func _on_idle_finished() -> void:
 	_is_idle_playing = false
@@ -133,6 +137,33 @@ func _play_idle_squish() -> void:
 		"scale",
 		Vector2.ONE,
 		idle_squish_duration
+	)
+
+	_idle_tween.finished.connect(_on_idle_finished)
+
+
+func _play_idle_look() -> void:
+	_idle_tween = create_tween()
+	_idle_tween.set_trans(Tween.TRANS_SINE)
+	_idle_tween.set_ease(Tween.EASE_IN_OUT)
+
+	var look_direction := 1.0
+	if randf() < 0.5:
+		look_direction = -1.0
+
+	var look_scale = Vector2(look_direction, 1.0)
+
+	_idle_tween.tween_property(
+		pet_visual,
+		"scale",
+		look_scale,
+		idle_look_duration
+	)
+	_idle_tween.tween_property(
+		pet_visual,
+		"scale",
+		Vector2.ONE,
+		idle_look_duration
 	)
 
 	_idle_tween.finished.connect(_on_idle_finished)
