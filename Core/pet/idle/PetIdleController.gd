@@ -15,6 +15,7 @@ class_name PetIdleController
 @export var idle_squish_duration: float = 0.28
 @export var idle_look_duration: float = 0.20
 @export var idle_interval_jitter: float = 0.8
+@export var idle_self_event_chance: float = 0.05
 
 var _idle_tween: Tween
 var _is_idle_playing: bool = false
@@ -85,15 +86,22 @@ func _trigger_idle() -> void:
 	
 	if _idle_tween != null:
 		_idle_tween.kill()
-	
-	_is_idle_playing = true
+		_idle_tween = null
 	
 	var roll := randf()
+
+	# Rare self-event hook
+	if roll < idle_self_event_chance:
+		_trigger_idle_event()
+		return
+
+	_is_idle_playing = true
+	
 	var selected_idle: StringName = &"pulse"
 	
-	if roll < 0.50:
+	if roll < 0.70:
 		selected_idle = &"pulse"
-	elif roll < 0.85:
+	elif roll < 0.92:
 		selected_idle = &"squish"
 	else:
 		selected_idle = &"look"
@@ -113,7 +121,6 @@ func _trigger_idle() -> void:
 			_play_idle_squish()
 		&"look":
 			_play_idle_look()
-
 func _on_idle_finished() -> void:
 	_is_idle_playing = false
 	_idle_tween = null
@@ -204,6 +211,9 @@ func _play_idle_look() -> void:
 func notify_action_performed() -> void:
 	_idle_cooldown_timer = idle_cooldown_after_action
 
+
+func _trigger_idle_event() -> void:
+	print("Pet self event triggered")
 
 func _get_state_idle_strength() -> float:
 	match pet_state_controller.current_state:
