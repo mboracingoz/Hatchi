@@ -20,6 +20,8 @@ const STATE_SLEEPING := &"sleeping"
 @export var clean_button: Button
 @export var sleep_button: Button
 
+@export var pet_idle_controller: PetIdleController
+
 const LOW_THRESHOLD := 35.0
 const CRITICAL_THRESHOLD := 15.0
 
@@ -398,6 +400,9 @@ func play_action_reaction(strength: float = 1.1) -> void:
 	action_tween.tween_property(pet_visual, "scale", Vector2(strength, strength), 0.12)
 	action_tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.18)
 	action_tween.tween_callback(func():update_state_animations())
+	
+	if pet_idle_controller != null:
+		pet_idle_controller.notify_action_performed()
 
 func show_sleep_warning(text: String) -> void:
 	if sleep_warning_label == null:

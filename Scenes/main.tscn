@@ -96,7 +96,7 @@ text = "PetArea"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "sleep_warning_label", "pet_visual", "feed_button", "cuddle_button", "clean_button", "sleep_button", "need_system") groups=["pet_state_controller"]]
+[node name="StateLabel" type="Label" parent="RootLayout/PetArea" unique_id=1440359365 node_paths=PackedStringArray("pet_area", "state_label", "sleep_label", "sleep_warning_label", "pet_visual", "feed_button", "cuddle_button", "clean_button", "sleep_button", "pet_idle_controller", "need_system") groups=["pet_state_controller"]]
 layout_mode = 2
 script = ExtResource("1_6bp64")
 pet_area = NodePath("..")
@@ -108,6 +108,7 @@ feed_button = NodePath("../../ActionPanel/ActionsContainer/FeedButton")
 cuddle_button = NodePath("../../ActionPanel/ActionsContainer/CuddlePetButton")
 clean_button = NodePath("../../ActionPanel/ActionsContainer/CleanButton")
 sleep_button = NodePath("../../ActionPanel/ActionsContainer/SleepButton")
+pet_idle_controller = NodePath("../../../PetIdleController")
 need_system = NodePath("../../../NeedSystem")
 
 [node name="PetVisualLayer" type="Control" parent="RootLayout/PetArea" unique_id=522036572]

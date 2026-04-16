@@ -65,7 +65,10 @@ func _can_run_idle() -> bool:
 	if pet_visual == null or pet_state_controller == null:
 		return false
 	
-	if pet_state_controller.current_state != PetStateController.STATE_NORMAL:
+	if pet_state_controller.current_state == PetStateController.STATE_SLEEPING:
+		return false
+
+	if pet_state_controller.current_state == PetStateController.STATE_CRITICAL:
 		return false
 	
 	return true
@@ -97,6 +100,9 @@ func _on_idle_finished() -> void:
 		pet_visual.scale = Vector2.ONE
 
 func _play_idle_pulse() -> void:
+	var random_scale = randf_range(idle_pulse_scale_min, idle_pulse_scale_max)
+	var strength = _get_state_idle_strength()
+	random_scale = lerp(1.0, random_scale, strength)
 	_idle_tween = create_tween()
 	_idle_tween.set_trans(Tween.TRANS_SINE)
 	_idle_tween.set_ease(Tween.EASE_IN_OUT)
@@ -119,6 +125,10 @@ func _play_idle_pulse() -> void:
 func _play_idle_squish() -> void:
 	var x = randf_range(1.08, 1.14)
 	var y = randf_range(0.86, 0.92)
+	var strength = _get_state_idle_strength()
+
+	x = lerp(1.0, x, strength)
+	y = lerp(1.0, y, strength)
 	var squish_scale = Vector2(x, y)
 	_idle_tween = create_tween()
 	_idle_tween.set_trans(Tween.TRANS_SINE)
@@ -167,5 +177,19 @@ func _play_idle_look() -> void:
 
 	_idle_tween.finished.connect(_on_idle_finished)
 
-func notify_action_parameter() -> void:
+func notify_action_performed() -> void:
 	_idle_cooldown_timer = idle_cooldown_after_action
+
+
+func _get_state_idle_strength() -> float:
+	match pet_state_controller.current_state:
+		PetStateController.STATE_NORMAL:
+			return 1.0
+		pet_state_controller.STATE_HUNGRY:
+			return 0.7
+		pet_state_controller.STATE_SAD:
+			return 0.6
+		pet_state_controller.STATE_SLEEPY:
+			return 1.2
+		_:
+			return 0.5
