@@ -14,6 +14,7 @@ class_name PetIdleController
 @export  var idle_pulse_duration: float = 0.22
 @export var idle_squish_duration: float = 0.28
 @export var idle_look_duration: float = 0.20
+@export var idle_interval_jitter: float = 0.8
 
 var _idle_tween: Tween
 var _is_idle_playing: bool = false
@@ -31,7 +32,10 @@ func _ready() -> void:
 
 
 func _reset_idle_timer() -> void:
-	_current_idle_interval = randf_range(idle_interval_min, idle_interval_max)
+	var base = randf_range(idle_interval_min, idle_interval_max)
+	var jitter = randf_range(-idle_interval_jitter, idle_interval_jitter)
+
+	_current_idle_interval = max(0.5, base + jitter)
 	_idle_timer = 0.0
 
 
