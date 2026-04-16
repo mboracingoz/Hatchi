@@ -17,6 +17,7 @@ class_name PetIdleController
 
 var _idle_tween: Tween
 var _is_idle_playing: bool = false
+var _last_idle_type: StringName = &""
 
 #TİMER
 @export var idle_cooldown_after_action: float = 2.0
@@ -84,13 +85,30 @@ func _trigger_idle() -> void:
 	_is_idle_playing = true
 	
 	var roll := randf()
-
+	var selected_idle: StringName = &"pulse"
+	
 	if roll < 0.50:
-		_play_idle_pulse()
+		selected_idle = &"pulse"
 	elif roll < 0.85:
-		_play_idle_squish()
+		selected_idle = &"squish"
 	else:
-		_play_idle_look()
+		selected_idle = &"look"
+	
+	if selected_idle == _last_idle_type:
+		if selected_idle == &"pulse":
+			selected_idle = &"squish"
+		elif selected_idle == &"squish":
+			selected_idle = &"pulse"
+	
+	_last_idle_type = selected_idle
+	
+	match selected_idle:
+		&"pulse":
+			_play_idle_pulse()
+		&"squish":
+			_play_idle_squish()
+		&"look":
+			_play_idle_look()
 
 func _on_idle_finished() -> void:
 	_is_idle_playing = false
@@ -160,7 +178,9 @@ func _play_idle_look() -> void:
 	if randf() < 0.5:
 		look_direction = -1.0
 
-	var look_scale = Vector2(0.94 * look_direction, 1.0)
+	var strength = _get_state_idle_strength()
+	var look_x = lerp(1.0, 0.94, strength) * look_direction
+	var look_scale = Vector2(look_x, 1.0)
 
 	_idle_tween.tween_property(
 		pet_visual,
