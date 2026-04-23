@@ -19,8 +19,10 @@ class_name PetIdleController
 @export var idle_event_label: RichTextLabel
 	
 var _idle_tween: Tween
+var _idle_event_tween: Tween
 var _is_idle_playing: bool = false
 var _last_idle_type: StringName = &""
+var _idle_event_start_pos: Vector2 = Vector2.ZERO
 
 var _idle_event_symbols := [
 	"[color=green]...[/color]",
@@ -37,6 +39,10 @@ var _current_idle_interval: float = 0.0
 func _ready() -> void:
 	randomize()
 	_reset_idle_timer()
+	
+	if idle_event_label != null:
+		_idle_event_start_pos = idle_event_label.position
+		idle_event_label.visible = false
 
 
 func _reset_idle_timer() -> void:
@@ -225,71 +231,90 @@ func _trigger_idle_event() -> void:
 
 	print("Pet self event triggered")
 
+	# Önce eski tween varsa temizle
+	if _idle_event_tween != null:
+		_idle_event_tween.kill()
+		_idle_event_tween = null
+
 	var symbol = _idle_event_symbols.pick_random()
 	_show_idle_event(symbol)
 
+	# --- Symbol bazlı ayarlar ---
 	var fade_in_duration := 0.18
 	var visible_hold_duration := 0.30
 	var fade_out_duration := 1.25
-	var float_offset := 14.0
+	var float_offset := -14.0
+	var start_scale := Vector2(0.92, 0.92)
 
 	if symbol.find("!") != -1:
-		fade_out_duration = 0.14
+		fade_in_duration = 0.14
 		visible_hold_duration = 0.22
 		fade_out_duration = 1.05
 		float_offset = -12.0
+		start_scale = Vector2(0.88, 0.88)
+
 	elif symbol.find("❤") != -1:
-		fade_out_duration = 0.20
+		fade_in_duration = 0.20
 		visible_hold_duration = 0.34
 		fade_out_duration = 1.40
 		float_offset = -16.0
+		start_scale = Vector2(0.95, 0.95)
 
-	var start_pos = idle_event_label.position
+	# --- Pozisyon setup ---
+	var start_pos = _idle_event_start_pos
 	var end_pos = start_pos + Vector2(0, float_offset)
 
+	idle_event_label.position = start_pos
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 0.0
-	idle_event_label.position = start_pos
+	idle_event_label.scale = start_scale
 
-	var bubble_tween = create_tween()
-	bubble_tween.set_trans(Tween.TRANS_SINE)
-	bubble_tween.set_ease(Tween.EASE_OUT)
+	# --- Tween oluştur ---
+	_idle_event_tween = create_tween()
+	var t = _idle_event_tween
 
-	# 1) Fade in
-	bubble_tween.tween_property(
+	t.set_trans(Tween.TRANS_SINE)
+	t.set_ease(Tween.EASE_OUT)
+
+	# 1) Fade in + pop
+	t.tween_property(
 		idle_event_label,
 		"modulate:a",
 		1.0,
 		fade_in_duration
 	)
 
-	bubble_tween.tween_interval(visible_hold_duration)
+	t.parallel().tween_property(
+		idle_event_label,
+		"scale",
+		Vector2.ONE,
+		fade_in_duration
+	)
 
-	bubble_tween.parallel().tween_property(
+	# 2) Okunabilir bekleme
+	t.tween_interval(visible_hold_duration)
+
+	# 3) Float + fade out
+	t.parallel().tween_property(
 		idle_event_label,
 		"position",
 		end_pos,
 		fade_out_duration
 	)
 
-	bubble_tween.parallel().tween_property(
+	t.parallel().tween_property(
 		idle_event_label,
 		"modulate:a",
 		0.0,
 		fade_out_duration
 	)
-	
-	bubble_tween.parallel().tween_property(
-	idle_event_label,
-	"scale",
-	Vector2.ONE,
-	fade_in_duration
-	)
 
-	bubble_tween.tween_callback(func():
+	# 4) Reset
+	t.tween_callback(func():
 		idle_event_label.visible = false
-		idle_event_label.position = start_pos
+		idle_event_label.position = _idle_event_start_pos
 		idle_event_label.scale = Vector2.ONE
+		idle_event_label.modulate.a = 1.0
 	)
 
 func _get_state_idle_strength() -> float:
@@ -314,6 +339,16 @@ func stop_idle_immediately() -> void:
 	
 	if pet_visual != null:
 		pet_visual.scale = Vector2.ONE
+	
+	if _idle_event_tween != null:
+		_idle_event_tween.kill()
+		_idle_event_tween = null
+	
+	if idle_event_label != null:
+		idle_event_label.visible = false
+		idle_event_label.position = idle_event_label.position
+		idle_event_label.scale = Vector2.ONE
+		idle_event_label.modulate.a = 1.0
 
 
 func _show_idle_event(text: String) -> void:
