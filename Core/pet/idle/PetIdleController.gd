@@ -220,43 +220,62 @@ func notify_action_performed() -> void:
 
 
 func _trigger_idle_event() -> void:
+	if idle_event_label == null:
+		return
+
 	print("Pet self event triggered")
 
 	var symbol = _idle_event_symbols.pick_random()
 	_show_idle_event(symbol)
 
-	var duration := 1.0
+	var fade_in_duration := 0.18
+	var visible_hold_duration := 0.30
+	var fade_out_duration := 1.25
 
 	if symbol.find("!") != -1:
-		duration = 2.2
+		fade_out_duration = 1.35
 	elif symbol.find("❤") != -1:
-		duration = 2.3
+		fade_out_duration = 1.45
+
+	var start_pos = idle_event_label.position
+	var end_pos = start_pos + Vector2(0, -14)
+
+	idle_event_label.visible = true
+	idle_event_label.modulate.a = 0.0
+	idle_event_label.position = start_pos
 
 	var bubble_tween = create_tween()
 	bubble_tween.set_trans(Tween.TRANS_SINE)
 	bubble_tween.set_ease(Tween.EASE_OUT)
 
-	var start_pos = idle_event_label.position
-	var end_pos = start_pos + Vector2(0, -20)
+	# 1) Fade in
+	bubble_tween.tween_property(
+		idle_event_label,
+		"modulate:a",
+		1.0,
+		fade_in_duration
+	)
+
+	bubble_tween.tween_interval(visible_hold_duration)
 
 	bubble_tween.parallel().tween_property(
 		idle_event_label,
 		"position",
 		end_pos,
-		duration
+		fade_out_duration
 	)
 
 	bubble_tween.parallel().tween_property(
 		idle_event_label,
 		"modulate:a",
 		0.0,
-		duration
-)
+		fade_out_duration
+	)
 
 	bubble_tween.tween_callback(func():
 		idle_event_label.visible = false
 		idle_event_label.position = start_pos
-)
+	)
 
 func _get_state_idle_strength() -> float:
 	match pet_state_controller.current_state:
@@ -281,6 +300,7 @@ func stop_idle_immediately() -> void:
 	if pet_visual != null:
 		pet_visual.scale = Vector2.ONE
 
+
 func _show_idle_event(text: String) -> void:
 	if idle_event_label == null:
 		return
@@ -289,3 +309,4 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.append_text(text)
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 1.0
+	idle_event_label.scale = Vector2.ONE
