@@ -364,4 +364,25 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.scale = Vector2(0.92, 0.92	)
 
 func _on_micro_event_triggered(event_data: Dictionary) -> void:
-	print("Micro event received in PetIdleController: ", event_data)
+	var event_type: StringName = event_data.get("type", &"observe")
+	var event_id: StringName = event_data.get("id", &"")
+
+	match event_type:
+		&"observe":
+			_handle_observe_event(event_id)
+		&"mood":
+			_handle_mood_event(event_id)
+		&"choice":
+			_handle_choice_event(event_id)
+
+
+func _handle_observe_event(event_id: StringName) -> void:
+	print("OBSERVE EVENT:", event_id)
+
+
+func _handle_mood_event(event_id: StringName) -> void:
+	print("MOOD EVENT:", event_id)
+
+
+func _handle_choice_event(event_id: StringName) -> void:
+	print("CHOICE EVENT:", event_id)
