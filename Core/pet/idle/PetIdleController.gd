@@ -271,10 +271,18 @@ func _trigger_idle_event() -> void:
 		0.0,
 		fade_out_duration
 	)
+	
+	bubble_tween.parallel().tween_property(
+	idle_event_label,
+	"scale",
+	Vector2.ONE,
+	fade_in_duration
+	)
 
 	bubble_tween.tween_callback(func():
 		idle_event_label.visible = false
 		idle_event_label.position = start_pos
+		idle_event_label.scale = Vector2.ONE
 	)
 
 func _get_state_idle_strength() -> float:
@@ -309,4 +317,4 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.append_text(text)
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 1.0
-	idle_event_label.scale = Vector2.ONE
+	idle_event_label.scale = Vector2(0.92, 0.92	)
