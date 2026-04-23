@@ -1,19 +1,28 @@
 extends Node
 class_name PetMicroEventController
 
-signal  micro_event_triggered(event_id: StringName)
+signal micro_event_triggered(event_data: Dictionary)
 
 
 func trigger_random_event() -> void:
-	var event_id: StringName = _pick_event()
-	print("Micro event emitted: ", event_id)
-	micro_event_triggered.emit(event_id)
+	var event_data := _pick_event()
+	print("Micro event emitted: ", event_data)
+	micro_event_triggered.emit(event_data)
 
-func _pick_event() -> StringName:
+func _pick_event() -> Dictionary:
 	var events := [
-	&"idle_think",
-	&"idle_notice",
-	&"idle_love"
+		{
+			"id": &"idle_think",
+			"type": &"observe"
+		},
+		{
+			"id": &"idle_notice",
+			"type": &"observe"
+		},
+		{
+			"id": &"idle_love",
+			"type": &"mood"
+		}
 	]
-	
+
 	return events.pick_random()

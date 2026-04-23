@@ -363,5 +363,5 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.modulate.a = 1.0
 	idle_event_label.scale = Vector2(0.92, 0.92	)
 
-func _on_micro_event_triggered(event_id: StringName) -> void:
-	print("Micro event received in PetIdleController: ", event_id)
+func _on_micro_event_triggered(event_data: Dictionary) -> void:
+	print("Micro event received in PetIdleController: ", event_data)
