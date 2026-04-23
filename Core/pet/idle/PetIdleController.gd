@@ -4,6 +4,8 @@ class_name PetIdleController
 @export var pet_visual: CanvasItem
 @export var pet_state_controller: PetStateController
 
+@export var micro_event_controller: PetMicroEventController
+
 @export var idle_interval_min: float = 2.5
 @export var idle_interval_max: float = 5.0
 @export var process_enabled: bool = true
@@ -43,6 +45,10 @@ func _ready() -> void:
 	if idle_event_label != null:
 		_idle_event_start_pos = idle_event_label.position
 		idle_event_label.visible = false
+	
+	if micro_event_controller != null:
+		if not micro_event_controller.micro_event_triggered.is_connected(_on_micro_event_triggered):
+			micro_event_controller.micro_event_triggered.connect(_on_micro_event_triggered)
 
 
 func _reset_idle_timer() -> void:
@@ -231,15 +237,17 @@ func _trigger_idle_event() -> void:
 
 	print("Pet self event triggered")
 
-	# Önce eski tween varsa temizle
 	if _idle_event_tween != null:
 		_idle_event_tween.kill()
 		_idle_event_tween = null
 
 	var symbol = _idle_event_symbols.pick_random()
+	
+	if micro_event_controller != null:
+		micro_event_controller.trigger_random_event()
+	
 	_show_idle_event(symbol)
 
-	# --- Symbol bazlı ayarlar ---
 	var fade_in_duration := 0.18
 	var visible_hold_duration := 0.30
 	var fade_out_duration := 1.25
@@ -260,7 +268,6 @@ func _trigger_idle_event() -> void:
 		float_offset = -16.0
 		start_scale = Vector2(0.95, 0.95)
 
-	# --- Pozisyon setup ---
 	var start_pos = _idle_event_start_pos
 	var end_pos = start_pos + Vector2(0, float_offset)
 
@@ -269,14 +276,12 @@ func _trigger_idle_event() -> void:
 	idle_event_label.modulate.a = 0.0
 	idle_event_label.scale = start_scale
 
-	# --- Tween oluştur ---
 	_idle_event_tween = create_tween()
 	var t = _idle_event_tween
 
 	t.set_trans(Tween.TRANS_SINE)
 	t.set_ease(Tween.EASE_OUT)
 
-	# 1) Fade in + pop
 	t.tween_property(
 		idle_event_label,
 		"modulate:a",
@@ -291,10 +296,8 @@ func _trigger_idle_event() -> void:
 		fade_in_duration
 	)
 
-	# 2) Okunabilir bekleme
 	t.tween_interval(visible_hold_duration)
 
-	# 3) Float + fade out
 	t.parallel().tween_property(
 		idle_event_label,
 		"position",
@@ -309,7 +312,6 @@ func _trigger_idle_event() -> void:
 		fade_out_duration
 	)
 
-	# 4) Reset
 	t.tween_callback(func():
 		idle_event_label.visible = false
 		idle_event_label.position = _idle_event_start_pos
@@ -360,3 +362,6 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 1.0
 	idle_event_label.scale = Vector2(0.92, 0.92	)
+
+func _on_micro_event_triggered(event_id: StringName) -> void:
+	print("Micro event received in PetIdleController: ", event_id)
