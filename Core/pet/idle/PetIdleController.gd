@@ -231,14 +231,21 @@ func _trigger_idle_event() -> void:
 	var fade_in_duration := 0.18
 	var visible_hold_duration := 0.30
 	var fade_out_duration := 1.25
+	var float_offset := 14.0
 
 	if symbol.find("!") != -1:
-		fade_out_duration = 1.35
+		fade_out_duration = 0.14
+		visible_hold_duration = 0.22
+		fade_out_duration = 1.05
+		float_offset = -12.0
 	elif symbol.find("❤") != -1:
-		fade_out_duration = 1.45
+		fade_out_duration = 0.20
+		visible_hold_duration = 0.34
+		fade_out_duration = 1.40
+		float_offset = -16.0
 
 	var start_pos = idle_event_label.position
-	var end_pos = start_pos + Vector2(0, -14)
+	var end_pos = start_pos + Vector2(0, float_offset)
 
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 0.0
