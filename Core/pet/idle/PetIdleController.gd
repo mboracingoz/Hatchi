@@ -6,6 +6,8 @@ class_name PetIdleController
 @export var micro_event_controller: PetMicroEventController
 @export var choice_panel_controller: ChoicePanelController
 
+@export var feedback_label: Label
+
 @export var idle_interval_min: float = 2.5
 @export var idle_interval_max: float = 5.0
 @export var process_enabled: bool = true
@@ -366,7 +368,7 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.append_text(text)
 	idle_event_label.visible = true
 	idle_event_label.modulate.a = 1.0
-	idle_event_label.scale = Vector2(0.92, 0.92	)
+	idle_event_label.scale = Vector2(0.92, 0.92)
 
 func _on_micro_event_triggered(event_data: Dictionary) -> void:
 	var event_type: StringName = event_data.get("type", &"observe")
@@ -410,12 +412,6 @@ func _on_choice_selected(event_id: StringName, option_id: StringName) -> void:
 		&"option_b":
 			_apply_rest_choice_result()
 
-	match option_id:
-		&"option_a":
-			print("Apply result: Play choice")
-		&"option_b":
-			print("Apply result: Rest choice")
-
 func _apply_play_choice_result() -> void:
 	print("Choice result: Play")
 
@@ -446,4 +442,16 @@ func _apply_rest_choice_result() -> void:
 	_show_feedback("Feeling better...")
 
 func _show_feedback(text: String) -> void:
-	print("FEEDBACK:", text)
+	if feedback_label == null:
+		return
+
+	feedback_label.text = text
+	feedback_label.visible = true
+	feedback_label.modulate.a = 1.0
+
+	var tween := create_tween()
+	tween.tween_interval(1.2)
+	tween.tween_property(feedback_label, "modulate:a", 0.0, 0.4)
+	tween.finished.connect(func():
+		feedback_label.visible = false
+	)

@@ -43,6 +43,8 @@ bg_color = Color(0.14605942, 0.2466358, 9.62615e-08, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjvhh"]
 bg_color = Color(0.40655044, 0.2904154, 0.19331902, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_hptm8"]
+
 [node name="Main" type="Control" unique_id=339474420]
 layout_mode = 3
 anchors_preset = 0
@@ -325,5 +327,15 @@ text = "Play"
 [node name="OptionBButton" type="Button" parent="OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel/Content" unique_id=709571193]
 layout_mode = 2
 text = "Rest"
+
+[node name="FeedbackLabel" type="Label" parent="OverlayLayer/OverlayRoot" unique_id=167000521]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "\"sadasdas\""
+label_settings = SubResource("LabelSettings_hptm8")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="RootLayout/ActionPanel/ActionsContainer/SleepButton" to="RootLayout/PetArea/StateLabel" method="toggle_sleep"]
