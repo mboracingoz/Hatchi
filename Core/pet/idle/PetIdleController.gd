@@ -386,3 +386,7 @@ func _handle_mood_event(event_id: StringName) -> void:
 
 func _handle_choice_event(event_id: StringName) -> void:
 	print("CHOICE EVENT:", event_id)
+
+	stop_idle_immediately()
+
+	print(">> Waiting for player choice...")

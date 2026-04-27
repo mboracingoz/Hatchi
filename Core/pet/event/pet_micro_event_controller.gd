@@ -22,6 +22,10 @@ func _pick_event() -> Dictionary:
 		{
 			"id": &"idle_love",
 			"type": &"mood"
+		},
+		{
+			"id": &"question_simple",
+			"type": &"choice"
 		}
 	]
 
