@@ -421,9 +421,29 @@ func _apply_play_choice_result() -> void:
 
 	if need_system != null and need_system.has_method("add_happiness"):
 		need_system.add_happiness(10)
+	
+	if pet_visual != null:
+		var tween := create_tween()
+		tween.set_trans(Tween.TRANS_BACK)
+		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property(pet_visual, "scale", Vector2.ONE * 1.08, 0.12)
+		tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.16)
+		
+	_show_feedback("That was fun!")
 
 func _apply_rest_choice_result() -> void:
 	print("Choice result: Rest")
 
 	if need_system != null and need_system.has_method("add_sleep"):
 		need_system.add_sleep(10)
+	
+	if pet_visual != null:
+		var tween := create_tween()
+		tween.set_trans(Tween.TRANS_SINE)
+		tween.set_ease(Tween.EASE_IN_OUT)
+		tween.tween_property(pet_visual, "scale", Vector2(0.96, 0.96), 0.18)
+		tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.22)
+	_show_feedback("Feeling better...")
+
+func _show_feedback(text: String) -> void:
+	print("FEEDBACK:", text)
