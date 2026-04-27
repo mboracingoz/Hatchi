@@ -49,7 +49,10 @@ func _ready() -> void:
 	if micro_event_controller != null:
 		if not micro_event_controller.micro_event_triggered.is_connected(_on_micro_event_triggered):
 			micro_event_controller.micro_event_triggered.connect(_on_micro_event_triggered)
-
+	
+	if choice_panel_controller != null:
+		if not choice_panel_controller.choice_selected.is_connected(_on_choice_selected):
+			choice_panel_controller.choice_selected.connect(_on_choice_selected)
 
 func _reset_idle_timer() -> void:
 	var base = randf_range(idle_interval_min, idle_interval_max)
@@ -394,3 +397,6 @@ func _handle_choice_event(event_id: StringName) -> void:
 		return
 
 	choice_panel_controller.show_choice(event_id)
+
+func _on_choice_selected(event_id: StringName, option_id: StringName) -> void:
+	print("Choice selected: ", event_id, " / ", option_id)
