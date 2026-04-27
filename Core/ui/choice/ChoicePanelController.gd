@@ -5,16 +5,26 @@ class_name ChoicePanelController
 @export var option_a_button: Button
 @export var option_b_button: Button
 
-func _ready() -> void:
-	visible = false
+var current_event_id: StringName
 
-func show_choice(_event_id: StringName) -> void:
+func _ready() -> void:
+	hide()
+
+	if option_a_button != null:
+		option_a_button.pressed.connect(_on_option_a_pressed)
+
+	if option_b_button != null:
+		option_b_button.pressed.connect(_on_option_b_pressed)
+
+
+func show_choice(event_id: StringName) -> void:
+	current_event_id = event_id
+
 	var parent_node := get_parent()
 	while parent_node != null and parent_node is CanvasItem:
 		parent_node.visible = true
 		parent_node = parent_node.get_parent()
 
-	visible = true
 	show()
 	modulate.a = 1.0
 
@@ -26,3 +36,13 @@ func show_choice(_event_id: StringName) -> void:
 
 	if option_b_button != null:
 		option_b_button.text = "Rest"
+
+
+func _on_option_a_pressed() -> void:
+	print("Choice A selected for: ", current_event_id)
+	hide()
+
+
+func _on_option_b_pressed() -> void:
+	print("Choice B selected for: ", current_event_id)
+	hide()
