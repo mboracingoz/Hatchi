@@ -1,6 +1,8 @@
 extends PanelContainer
 class_name ChoicePanelController
 
+signal choice_selected(event_id: StringName, option_id: StringName)
+
 @export var question_label: Label
 @export var option_a_button: Button
 @export var option_b_button: Button
@@ -39,10 +41,10 @@ func show_choice(event_id: StringName) -> void:
 
 
 func _on_option_a_pressed() -> void:
-	print("Choice A selected for: ", current_event_id)
+	choice_selected.emit(current_event_id, &"option_a")
 	hide()
 
 
 func _on_option_b_pressed() -> void:
-	print("Choice B selected for: ", current_event_id)
+	choice_selected.emit(current_event_id, &"option_b")
 	hide()
