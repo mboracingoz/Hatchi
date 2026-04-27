@@ -401,13 +401,29 @@ func _handle_choice_event(event_id: StringName) -> void:
 	choice_panel_controller.show_choice(event_id)
 
 func _on_choice_selected(event_id: StringName, option_id: StringName) -> void:
-	print("Choice selected: ", event_id, " / ", option_id)
-
 	if event_id != &"question_simple":
 		return
+
+	match option_id:
+		&"option_a":
+			_apply_play_choice_result()
+		&"option_b":
+			_apply_rest_choice_result()
 
 	match option_id:
 		&"option_a":
 			print("Apply result: Play choice")
 		&"option_b":
 			print("Apply result: Rest choice")
+
+func _apply_play_choice_result() -> void:
+	print("Choice result: Play")
+
+	if need_system != null and need_system.has_method("add_happiness"):
+		need_system.add_happiness(10)
+
+func _apply_rest_choice_result() -> void:
+	print("Choice result: Rest")
+
+	if need_system != null and need_system.has_method("add_sleep"):
+		need_system.add_sleep(10)
