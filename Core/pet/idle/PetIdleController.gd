@@ -10,6 +10,8 @@ class_name PetIdleController
 @export var idle_interval_max: float = 5.0
 @export var process_enabled: bool = true
 
+@export var need_system: Node
+
 #TWEEN
 @export var idle_pulse_scale_min: float = 1.02
 @export var idle_pulse_scale_max: float = 1.053
@@ -400,3 +402,12 @@ func _handle_choice_event(event_id: StringName) -> void:
 
 func _on_choice_selected(event_id: StringName, option_id: StringName) -> void:
 	print("Choice selected: ", event_id, " / ", option_id)
+
+	if event_id != &"question_simple":
+		return
+
+	match option_id:
+		&"option_a":
+			print("Apply result: Play choice")
+		&"option_b":
+			print("Apply result: Rest choice")
