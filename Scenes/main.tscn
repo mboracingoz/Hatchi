@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bkt4qxbfxga7m" path="res://Core/ui/Action/SleepButton.gd" id="5_6bp64"]
 [ext_resource type="Script" uid="uid://bqyhviq76q8kb" path="res://Core/pet/idle/PetIdleController.gd" id="8_344ge"]
 [ext_resource type="Script" uid="uid://cowvxmsdol40m" path="res://Core/pet/event/pet_micro_event_controller.gd" id="9_ynf5e"]
+[ext_resource type="Script" uid="uid://b8iuleb252vgk" path="res://Core/ui/choice/ChoicePanelController.gd" id="10_hptm8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
 bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
@@ -261,14 +262,67 @@ vertical_alignment = 1
 [node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
 script = ExtResource("2_bo1nx")
 
-[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller", "micro_event_controller", "idle_event_label")]
+[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller", "micro_event_controller", "choice_panel_controller", "idle_event_label")]
 script = ExtResource("8_344ge")
 pet_visual = NodePath("../RootLayout/PetArea/PetVisualLayer/PetVisual")
 pet_state_controller = NodePath("../RootLayout/PetArea/StateLabel")
 micro_event_controller = NodePath("../MicroEventController")
+choice_panel_controller = NodePath("../OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel")
 idle_event_label = NodePath("../RootLayout/PetArea/IdleEventUI/IdleEventLabel")
 
 [node name="MicroEventController" type="Node" parent="." unique_id=509403083]
 script = ExtResource("9_ynf5e")
+
+[node name="ScreenRoot" type="Control" parent="." unique_id=370866958]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="OverlayLayer" type="CanvasLayer" parent="." unique_id=186878986]
+layer = 10
+
+[node name="OverlayRoot" type="Control" parent="OverlayLayer" unique_id=846131244]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="OverlayLayer/OverlayRoot" unique_id=900576997]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChoicePanel" type="PanelContainer" parent="OverlayLayer/OverlayRoot/CenterContainer" unique_id=751719297 node_paths=PackedStringArray("question_label", "option_a_button", "option_b_button")]
+z_index = 20
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+script = ExtResource("10_hptm8")
+question_label = NodePath("Content/QuestionLabel")
+option_a_button = NodePath("Content/OptionAButton")
+option_b_button = NodePath("Content/OptionBButton")
+
+[node name="Content" type="VBoxContainer" parent="OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel" unique_id=2138602095]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="QuestionLabel" type="Label" parent="OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel/Content" unique_id=1014375614]
+layout_mode = 2
+text = "What should we do?"
+horizontal_alignment = 1
+
+[node name="OptionAButton" type="Button" parent="OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel/Content" unique_id=1391338841]
+layout_mode = 2
+text = "Play"
+
+[node name="OptionBButton" type="Button" parent="OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel/Content" unique_id=709571193]
+layout_mode = 2
+text = "Rest"
 
 [connection signal="pressed" from="RootLayout/ActionPanel/ActionsContainer/SleepButton" to="RootLayout/PetArea/StateLabel" method="toggle_sleep"]

@@ -3,8 +3,8 @@ class_name PetIdleController
 
 @export var pet_visual: CanvasItem
 @export var pet_state_controller: PetStateController
-
 @export var micro_event_controller: PetMicroEventController
+@export var choice_panel_controller: ChoicePanelController
 
 @export var idle_interval_min: float = 2.5
 @export var idle_interval_max: float = 5.0
@@ -389,4 +389,8 @@ func _handle_choice_event(event_id: StringName) -> void:
 
 	stop_idle_immediately()
 
-	print(">> Waiting for player choice...")
+	if choice_panel_controller == null:
+		print("ChoicePanelController is NULL")
+		return
+
+	choice_panel_controller.show_choice(event_id)

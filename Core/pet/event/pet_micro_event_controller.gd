@@ -11,18 +11,18 @@ func trigger_random_event() -> void:
 
 func _pick_event() -> Dictionary:
 	var events := [
-		{
-			"id": &"idle_think",
-			"type": &"observe"
-		},
-		{
-			"id": &"idle_notice",
-			"type": &"observe"
-		},
-		{
-			"id": &"idle_love",
-			"type": &"mood"
-		},
+		#{
+			#"id": &"idle_think",
+			#"type": &"observe"
+		#},
+		#{
+			#"id": &"idle_notice",
+			#"type": &"observe"
+		#},
+		#{
+			#"id": &"idle_love",
+			#"type": &"mood"
+		#},
 		{
 			"id": &"question_simple",
 			"type": &"choice"
