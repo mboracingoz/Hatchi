@@ -264,12 +264,13 @@ vertical_alignment = 1
 [node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
 script = ExtResource("2_bo1nx")
 
-[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller", "micro_event_controller", "choice_panel_controller", "need_system", "idle_event_label")]
+[node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller", "micro_event_controller", "choice_panel_controller", "feedback_label", "need_system", "idle_event_label")]
 script = ExtResource("8_344ge")
 pet_visual = NodePath("../RootLayout/PetArea/PetVisualLayer/PetVisual")
 pet_state_controller = NodePath("../RootLayout/PetArea/StateLabel")
 micro_event_controller = NodePath("../MicroEventController")
 choice_panel_controller = NodePath("../OverlayLayer/OverlayRoot/CenterContainer/ChoicePanel")
+feedback_label = NodePath("../OverlayLayer/OverlayRoot/FeedbackLabel")
 need_system = NodePath("../NeedSystem")
 idle_event_label = NodePath("../RootLayout/PetArea/IdleEventUI/IdleEventLabel")
 
@@ -330,11 +331,24 @@ text = "Rest"
 
 [node name="FeedbackLabel" type="Label" parent="OverlayLayer/OverlayRoot" unique_id=167000521]
 visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "\"sadasdas\""
-label_settings = SubResource("LabelSettings_hptm8")
+z_index = 50
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 42
+text = "Feedback text"
 horizontal_alignment = 1
 vertical_alignment = 1
 
