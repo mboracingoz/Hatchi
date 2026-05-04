@@ -1,6 +1,9 @@
 extends Node
 class_name  PetStateController
 
+signal state_changed(previous_state: StringName, current_state: StringName)
+signal sleep_toggled(is_sleeping: bool)
+
 const STATE_NORMAL := &"normal"
 const STATE_HUNGRY := &"hungry"
 const STATE_DIRTY := &"dirty"
@@ -39,7 +42,6 @@ var sleep_tween: Tween
 var pet_visual_tween: Tween
 var breathing_tween: Tween
 var critical_tween: Tween
-var is_sleeping: bool = false
 
 #Action Tweens
 var action_tween: Tween
@@ -69,7 +71,14 @@ func _ready() -> void:
 	update_pet_state_visual()
 	update_pet_state_reaction()
 
+	if need_system != null and need_system.has_signal("sleep_mode_changed"):
+		if not need_system.sleep_mode_changed.is_connected(_on_sleep_mode_changed):
+			need_system.sleep_mode_changed.connect(_on_sleep_mode_changed)
+	
 func _process(_delta: float) -> void:
+	_sync_state_from_needs()
+
+func _sync_state_from_needs() -> void:
 	if need_system == null or not ("needs" in need_system):
 		return
 	
@@ -90,11 +99,9 @@ func calculate_state(needs: Dictionary) -> StringName:
 	var sleep = needs.get("sleep").current_value
 
 	# Sleeping can override everything except critical hunger.
-	if is_sleeping:
+	if _is_sleeping():
 		if hunger > CRITICAL_THRESHOLD:
 			return STATE_SLEEPING
-		
-		is_sleeping = false
 
 	# Critical states
 	if hunger <= CRITICAL_THRESHOLD \
@@ -121,6 +128,7 @@ func calculate_state(needs: Dictionary) -> StringName:
 
 func on_state_changed():
 	print("State changed: ", previous_state, " -> ", current_state)
+	state_changed.emit(previous_state, current_state)
 
 	update_action_buttons()
 	update_pet_visual()
@@ -138,18 +146,20 @@ func on_state_changed():
 		pet_idle_controller.stop_idle_immediately()
 
 func update_action_buttons() -> void:
+	var sleeping := _is_sleeping()
+
 	if sleep_button != null:
 		sleep_button.disabled = false
-		sleep_button.text = "Wake" if is_sleeping else "Sleep"
+		sleep_button.text = "Wake" if sleeping else "Sleep"
 		
 	if feed_button != null:
-		feed_button.disabled = is_sleeping
+		feed_button.disabled = sleeping
 	
 	if cuddle_button != null:
-		cuddle_button.disabled = is_sleeping
+		cuddle_button.disabled = sleeping
 	
 	if clean_button != null:
-		clean_button.disabled = is_sleeping
+		clean_button.disabled = sleeping
 
 func get_state_text(state: StringName) -> String:
 	match state:
@@ -191,28 +201,27 @@ func get_state_color(state: StringName) -> Color:
 			return Color.WHITE
 
 func set_sleeping(value: bool) -> void:
-	is_sleeping = value
+	if need_system != null and need_system.has_method("set_sleeping"):
+		need_system.set_sleeping(value)
+
+func get_state_snapshot() -> Dictionary:
+	return {
+		"current_state": str(current_state),
+		"previous_state": str(previous_state),
+		"is_sleeping": _is_sleeping()
+	}
 
 
 func toggle_sleep() -> void:
-	if need_system == null or not ("needs" in need_system):
+	if need_system == null or not need_system.has_method("toggle_sleep"):
 		return
 
-	var hunger = need_system.needs["hunger"].current_value
-
-	# Wake up if already sleeping
-	if is_sleeping:
-		is_sleeping = false
-		print("Woke up")
+	if need_system.toggle_sleep():
+		print("Sleeping toggled (need system): ", _is_sleeping())
 		return
 
-	# Cannot sleep if hunger is critical
-	if hunger <= CRITICAL_THRESHOLD:
-		show_sleep_warning("Too hungry to sleep")
-		return
-
-	is_sleeping = true
-	print("Sleeping toggled (button): ", is_sleeping)
+	if need_system.has_method("get_sleep_block_reason"):
+		show_sleep_warning(need_system.get_sleep_block_reason())
 
 
 func update_state_animations() -> void:
@@ -227,15 +236,14 @@ func update_state_animations() -> void:
 # TEMP DEBUG INPUTS
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		is_sleeping = not is_sleeping
-		print("Sleeping toggled: ", is_sleeping)
+		toggle_sleep()
 
 
 func update_pet_visual() -> void:
 	if pet_area == null:
 		return
 	
-	if is_sleeping:
+	if _is_sleeping():
 		pet_area.modulate = Color(1.143, 1.001, 2.879, 1.0)
 	else:
 		pet_area.modulate = Color(1,1,1)
@@ -245,9 +253,9 @@ func update_sleep_label() -> void:
 	if sleep_label == null:
 		return
 
-	sleep_label.visible = is_sleeping
+	sleep_label.visible = _is_sleeping()
 	
-	if is_sleeping:
+	if _is_sleeping():
 		play_sleep_label_animation()
 	else:
 		if sleep_tween != null:
@@ -267,7 +275,7 @@ func play_sleep_label_animation() -> void:
 
 
 func _start_sleep_label_wander() -> void:
-	if sleep_label == null or not is_sleeping:
+	if sleep_label == null or not _is_sleeping():
 		return
 
 	var target_offset = Vector2(
@@ -452,3 +460,16 @@ func play_state_text_feedback() -> void:
 
 	state_text_tween.tween_property(state_label, "scale", Vector2(1.15, 1.15), 0.12)
 	state_text_tween.tween_property(state_label, "scale", Vector2.ONE, 0.18)
+
+func _is_sleeping() -> bool:
+	if need_system != null and need_system.has_method("is_sleeping_enabled"):
+		return need_system.is_sleeping_enabled()
+
+	return false
+
+func _on_sleep_mode_changed(new_value: bool) -> void:
+	sleep_toggled.emit(new_value)
+	update_action_buttons()
+	update_pet_visual()
+	update_sleep_label()
+	_sync_state_from_needs()

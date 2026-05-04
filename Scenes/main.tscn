@@ -10,6 +10,11 @@
 [ext_resource type="Script" uid="uid://bqyhviq76q8kb" path="res://Core/pet/idle/PetIdleController.gd" id="8_344ge"]
 [ext_resource type="Script" uid="uid://cowvxmsdol40m" path="res://Core/pet/event/pet_micro_event_controller.gd" id="9_ynf5e"]
 [ext_resource type="Script" uid="uid://b8iuleb252vgk" path="res://Core/ui/choice/ChoicePanelController.gd" id="10_hptm8"]
+[ext_resource type="Script" uid="uid://b161xk3icr8v" path="res://Systems/Personality/personality_system.gd" id="11_personality"]
+[ext_resource type="Script" uid="uid://qqmfu3yh1ll" path="res://Systems/Progression/bond_system.gd" id="12_bond"]
+[ext_resource type="Script" uid="uid://b5qpmku3n4p3w" path="res://Systems/Progression/lifecycle_system.gd" id="13_lifecycle"]
+[ext_resource type="Script" uid="uid://dc3cdd7grk7b6" path="res://Systems/Progression/egg_system.gd" id="14_egg"]
+[ext_resource type="Script" uid="uid://muihd4af7as2" path="res://Core/ui/egg/EggPanelController.gd" id="15_egg_panel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u77a"]
 bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
@@ -18,6 +23,29 @@ bg_color = Color(0.8370726, 0.16217735, 0.5312259, 1)
 bg_color = Color(0.27110246, 0.2602791, 0.2151742, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6bp64"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_egg"]
+bg_color = Color(0.917647, 0.862745, 0.694118, 0.96)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_egg_shell"]
+bg_color = Color(0.988235, 0.933333, 0.827451, 1)
+corner_radius_top_left = 92
+corner_radius_top_right = 92
+corner_radius_bottom_right = 110
+corner_radius_bottom_left = 110
+shadow_color = Color(0.423529, 0.333333, 0.215686, 0.28)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_egg_spot"]
+bg_color = Color(0.929412, 0.807843, 0.623529, 0.85)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bo1nx"]
 bg_color = Color(0.28485528, 0.5414254, 0.25359923, 1)
@@ -42,8 +70,6 @@ bg_color = Color(0.14605942, 0.2466358, 9.62615e-08, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjvhh"]
 bg_color = Color(0.40655044, 0.2904154, 0.19331902, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_hptm8"]
 
 [node name="Main" type="Control" unique_id=339474420]
 layout_mode = 3
@@ -155,6 +181,148 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="EggOverlay" type="CenterContainer" parent="RootLayout/PetArea" unique_id=1001157754]
+layout_mode = 2
+
+[node name="EggPanel" type="PanelContainer" parent="RootLayout/PetArea/EggOverlay" unique_id=691257802 node_paths=PackedStringArray("title_label", "status_label", "hint_label", "crack_button", "egg_visual_root", "egg_shell", "crack_small_label", "crack_large_label", "hatch_burst_label", "need_panel", "action_panel", "bottom_nav", "pet_visual", "state_label", "idle_event_ui", "sleep_warning_label", "choice_overlay_root", "pet_area_placeholder_label", "egg_system")]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_egg")
+script = ExtResource("15_egg_panel")
+title_label = NodePath("Content/TitleLabel")
+status_label = NodePath("Content/StatusLabel")
+hint_label = NodePath("Content/HintLabel")
+crack_button = NodePath("Content/CrackButton")
+egg_visual_root = NodePath("Content/EggVisualRoot")
+egg_shell = NodePath("Content/EggVisualRoot/Shell")
+crack_small_label = NodePath("Content/EggVisualRoot/Shell/CrackSmall")
+crack_large_label = NodePath("Content/EggVisualRoot/Shell/CrackLarge")
+hatch_burst_label = NodePath("Content/EggVisualRoot/HatchBurst")
+need_panel = NodePath("../../../NeedPanel")
+action_panel = NodePath("../../../ActionPanel")
+bottom_nav = NodePath("../../../BottomNav")
+pet_visual = NodePath("../../PetVisualLayer/PetVisual")
+state_label = NodePath("../../StateLabel")
+idle_event_ui = NodePath("../../IdleEventUI")
+sleep_warning_label = NodePath("../../SleepWarningLabel")
+choice_overlay_root = NodePath("../../../../OverlayLayer/OverlayRoot")
+pet_area_placeholder_label = NodePath("../../Label")
+egg_system = NodePath("../../../../EggSystem")
+
+[node name="Content" type="VBoxContainer" parent="RootLayout/PetArea/EggOverlay/EggPanel" unique_id=160902201]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="EggVisualRoot" type="Control" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content" unique_id=212311221]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+
+[node name="Shell" type="Panel" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content/EggVisualRoot" unique_id=627713212]
+custom_minimum_size = Vector2(190, 228)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.0
+offset_top = -108.0
+offset_right = 95.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_egg_shell")
+
+[node name="SpotOne" type="Panel" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content/EggVisualRoot/Shell" unique_id=534134221]
+custom_minimum_size = Vector2(32, 28)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 56.0
+offset_right = 72.0
+offset_bottom = 84.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_egg_spot")
+
+[node name="SpotTwo" type="Panel" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content/EggVisualRoot/Shell" unique_id=987613254]
+custom_minimum_size = Vector2(26, 22)
+layout_mode = 0
+offset_left = 122.0
+offset_top = 102.0
+offset_right = 148.0
+offset_bottom = 124.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_egg_spot")
+
+[node name="CrackSmall" type="Label" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content/EggVisualRoot/Shell" unique_id=361231212]
+visible = false
+layout_mode = 0
+offset_left = 79.0
+offset_top = 62.0
+offset_right = 117.0
+offset_bottom = 121.0
+theme_override_colors/font_color = Color(0.490196, 0.368627, 0.239216, 1)
+theme_override_font_sizes/font_size = 38
+text = "/\\"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CrackLarge" type="Label" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content/EggVisualRoot/Shell" unique_id=451267878]
+visible = false
+layout_mode = 0
+offset_left = 52.0
+offset_top = 102.0
+offset_right = 140.0
+offset_bottom = 176.0
+theme_override_colors/font_color = Color(0.454902, 0.329412, 0.2, 1)
+theme_override_font_sizes/font_size = 56
+text = "\\/\\/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HatchBurst" type="Label" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content/EggVisualRoot" unique_id=879451223]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -40.0
+offset_right = 120.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.968627, 0.713726, 1)
+theme_override_colors/font_outline_color = Color(0.431373, 0.258824, 0.12549, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 42
+text = "CRACK!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content" unique_id=501267734]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Common Egg"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content" unique_id=646476880]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Ready in 120s | Cracks: 0"
+horizontal_alignment = 1
+
+[node name="HintLabel" type="Label" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content" unique_id=162652322]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Tap to help crack it."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CrackButton" type="Button" parent="RootLayout/PetArea/EggOverlay/EggPanel/Content" unique_id=517540538]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+text = "Crack Egg"
+
 [node name="NeedPanel" type="PanelContainer" parent="RootLayout" unique_id=1679568641]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
@@ -263,6 +431,18 @@ vertical_alignment = 1
 
 [node name="NeedSystem" type="Node" parent="." unique_id=1651019410 groups=["need_system"]]
 script = ExtResource("2_bo1nx")
+
+[node name="PersonalitySystem" type="Node" parent="." unique_id=380674169 groups=["personality_system"]]
+script = ExtResource("11_personality")
+
+[node name="BondSystem" type="Node" parent="." unique_id=205254711 groups=["bond_system"]]
+script = ExtResource("12_bond")
+
+[node name="LifecycleSystem" type="Node" parent="." unique_id=1330816381 groups=["lifecycle_system"]]
+script = ExtResource("13_lifecycle")
+
+[node name="EggSystem" type="Node" parent="." unique_id=5377028 groups=["egg_system"]]
+script = ExtResource("14_egg")
 
 [node name="PetIdleController" type="Node" parent="." unique_id=762377820 node_paths=PackedStringArray("pet_visual", "pet_state_controller", "micro_event_controller", "choice_panel_controller", "feedback_label", "need_system", "idle_event_label")]
 script = ExtResource("8_344ge")

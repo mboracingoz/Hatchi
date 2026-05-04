@@ -23,6 +23,7 @@ class_name PetIdleController
 @export var idle_interval_jitter: float = 0.8
 @export var idle_self_event_chance: float = 0.4
 @export var idle_event_label: RichTextLabel
+@onready var egg_system = get_tree().get_first_node_in_group("egg_system")
 	
 var _idle_tween: Tween
 var _idle_event_tween: Tween
@@ -101,6 +102,9 @@ func _can_run_idle() -> bool:
 		return false
 
 	if pet_state_controller.current_state == PetStateController.STATE_CRITICAL:
+		return false
+
+	if egg_system != null and egg_system.has_method("is_gameplay_unlocked") and not bool(egg_system.is_gameplay_unlocked()):
 		return false
 	
 	return true
@@ -371,27 +375,35 @@ func _show_idle_event(text: String) -> void:
 	idle_event_label.scale = Vector2(0.92, 0.92)
 
 func _on_micro_event_triggered(event_data: Dictionary) -> void:
+	if not _is_gameplay_unlocked():
+		return
+
 	var event_type: StringName = event_data.get("type", &"observe")
-	var event_id: StringName = event_data.get("id", &"")
 
 	match event_type:
 		&"observe":
-			_handle_observe_event(event_id)
+			_handle_observe_event(event_data)
 		&"mood":
-			_handle_mood_event(event_id)
+			_handle_mood_event(event_data)
 		&"choice":
-			_handle_choice_event(event_id)
+			_handle_choice_event(event_data)
 
 
-func _handle_observe_event(event_id: StringName) -> void:
+func _handle_observe_event(event_data: Dictionary) -> void:
+	var event_id: StringName = event_data.get("id", &"")
 	print("OBSERVE EVENT:", event_id)
 
 
-func _handle_mood_event(event_id: StringName) -> void:
+func _handle_mood_event(event_data: Dictionary) -> void:
+	var event_id: StringName = event_data.get("id", &"")
 	print("MOOD EVENT:", event_id)
 
 
-func _handle_choice_event(event_id: StringName) -> void:
+func _handle_choice_event(event_data: Dictionary) -> void:
+	if not _is_gameplay_unlocked():
+		return
+
+	var event_id: StringName = event_data.get("id", &"")
 	print("CHOICE EVENT:", event_id)
 
 	stop_idle_immediately()
@@ -400,46 +412,65 @@ func _handle_choice_event(event_id: StringName) -> void:
 		print("ChoicePanelController is NULL")
 		return
 
-	choice_panel_controller.show_choice(event_id)
+	choice_panel_controller.show_choice(event_data)
+
+
+func _is_gameplay_unlocked() -> bool:
+	if egg_system == null or not egg_system.has_method("is_gameplay_unlocked"):
+		return true
+
+	return bool(egg_system.is_gameplay_unlocked())
 
 func _on_choice_selected(event_id: StringName, option_id: StringName) -> void:
-	if event_id != &"question_simple":
+	if micro_event_controller == null:
 		return
 
-	match option_id:
-		&"option_a":
-			_apply_play_choice_result()
-		&"option_b":
-			_apply_rest_choice_result()
+	var result_data := micro_event_controller.apply_choice_result(event_id, option_id)
+	if result_data.is_empty():
+		return
 
-func _apply_play_choice_result() -> void:
-	print("Choice result: Play")
+	_apply_choice_result(event_id, option_id, result_data)
 
-	if need_system != null and need_system.has_method("add_happiness"):
-		need_system.add_happiness(10)
-	
-	if pet_visual != null:
-		var tween := create_tween()
+func _apply_choice_result(event_id: StringName, option_id: StringName, result_data: Dictionary) -> void:
+	print("Choice result: ", event_id, " / ", option_id, " -> ", result_data)
+
+	_apply_need_effects(result_data.get("need_effects", {}))
+	_play_choice_reaction(result_data.get("reaction", {}))
+	_show_feedback(str(result_data.get("feedback", "")))
+
+func _apply_need_effects(need_effects: Dictionary) -> void:
+	if need_system == null:
+		return
+
+	for need_id in need_effects.keys():
+		var amount := float(need_effects[need_id])
+		if need_system.has_method("add_%s" % need_id):
+			need_system.call("add_%s" % need_id, amount)
+			continue
+
+		if need_system.has_method("set_need_value"):
+			var snapshot: Dictionary = need_system.get_needs_snapshot()
+			var current_need: Dictionary = snapshot.get(String(need_id), {})
+			var current_value := float(current_need.get("current_value", 0.0))
+			need_system.set_need_value(String(need_id), current_value + amount)
+
+func _play_choice_reaction(reaction_data: Dictionary) -> void:
+	if pet_visual == null:
+		return
+
+	var scale := float(reaction_data.get("scale", 1.0))
+	var profile := str(reaction_data.get("profile", "calm"))
+	var tween := create_tween()
+
+	if profile == "playful":
 		tween.set_trans(Tween.TRANS_BACK)
 		tween.set_ease(Tween.EASE_OUT)
-		tween.tween_property(pet_visual, "scale", Vector2.ONE * 1.08, 0.12)
-		tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.16)
-		
-	_show_feedback("That was fun!")
-
-func _apply_rest_choice_result() -> void:
-	print("Choice result: Rest")
-
-	if need_system != null and need_system.has_method("add_sleep"):
-		need_system.add_sleep(10)
-	
-	if pet_visual != null:
-		var tween := create_tween()
+	else:
 		tween.set_trans(Tween.TRANS_SINE)
 		tween.set_ease(Tween.EASE_IN_OUT)
-		tween.tween_property(pet_visual, "scale", Vector2(0.96, 0.96), 0.18)
-		tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.22)
-	_show_feedback("Feeling better...")
+
+	tween.tween_property(pet_visual, "scale", Vector2.ONE * scale, 0.14)
+	tween.tween_property(pet_visual, "scale", Vector2.ONE, 0.18)
 
 func _show_feedback(text: String) -> void:
 	if feedback_label == null:

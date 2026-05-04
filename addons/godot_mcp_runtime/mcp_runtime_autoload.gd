@@ -440,8 +440,12 @@ func _cmd_watch_signal(params: Dictionary) -> Dictionary:
 	if _watched_signals.has(key):
 		return {"type": "error", "message": "Signal already being watched"}
 	
-	var callable = func(args = []):
-		_broadcast_signal_event(node_path, signal_name, args)
+	var callable = func(arg1 = null, arg2 = null, arg3 = null, arg4 = null):
+		var signal_args: Array = []
+		for arg in [arg1, arg2, arg3, arg4]:
+			if arg != null:
+				signal_args.append(arg)
+		_broadcast_signal_event(node_path, signal_name, signal_args)
 	
 	node.connect(signal_name, callable)
 	_watched_signals[key] = callable

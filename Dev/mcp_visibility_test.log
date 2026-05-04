@@ -1,0 +1,34 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+Vulkan 1.4.312 - Forward Mobile - Using Device #0: NVIDIA - NVIDIA GeForce GTX 750 Ti
+
+[MCP Runtime] Server listening on port 7777
+[MCP Runtime] Autoload ready, server starting on port 7777
+SCRIPT ERROR: Parse Error: Cannot infer the type of "tint" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://Core/ui/egg/EggPanelController.gd:134)
+          GDScript backtrace (most recent call first):
+              [0] _change_to_main_scene (res://Scenes/Bootstrap/bootstrap.gd:10)
+ERROR: Failed to load script "res://Core/ui/egg/EggPanelController.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _change_to_main_scene (res://Scenes/Bootstrap/bootstrap.gd:10)
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+State changed: normal -> critical
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected
+[MCP Runtime] Client connected
+[MCP Runtime] Client disconnected

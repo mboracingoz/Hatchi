@@ -1,162 +1,58 @@
-GDD PROGRESS (GERÇEK DURUM)
-🟢 1. CORE LOOP (EN KRİTİK) → %85 DONE
+# Hatchi Current Implementation State & GDD Progress
 
-GDD Core Loop:
+Tarih: 2026-05-04
 
-Observe → Need → Event → Choice → Reaction
+## En Son Nerede Kaldik
 
-Senin sistem:
+Proje, onceki raporlardaki Faz 1-4 durumunun otesine gecmis durumda.
+Kod tabaninda Egg + Lifecycle + Personality Drift + Bond sistemleri aktif ve MCP regression rutini bu akislar icin yazilmis.
+Bu nedenle mevcut durum artik "MCP altyapisini kurma" degil, "oyun icerigi ve GDD derinligini tamamlama" asamasinda.
 
-✔ Idle gözlem var
-✔ Need sistemi var
-✔ Event sistemi var
-✔ Choice sistemi var
-✔ Reaction + Feedback var
+## Biten Isler (Kodda Mevcut)
 
-👉 Bu oyunun kalbi çalışıyor
+1. Core loop omurgasi: Need -> State -> Event -> Choice -> Reaction akisi calisiyor.
+2. Need sistemi: Hunger/Happiness/Hygiene/Sleep decay, snapshot ve state etkisi mevcut.
+3. Sleep tek kaynakli yapi: Sleep ownership `NeedSystem` tarafinda, `PetStateController` delegasyon yapiyor.
+4. Event/Choice altyapisi: Veri tabanli event catalog, secenek bazli need/personality etkileri uygulanabiliyor.
+5. Personality sistemi: 5 trait (energy/social/empathy/chaos/maturity), care + choice + pasif drift entegre.
+6. Bond sistemi: Care/choice/sleep katkisi, milestone yapisi ve snapshot API mevcut.
+7. Lifecycle sistemi: `egg -> baby -> juvenile -> adult -> final_form` gecis kurallari kodda var.
+8. Egg sistemi: zaman tabanli hatch, tap acceleration, force hatch, snapshot ve UI baglantisi mevcut.
+9. MCP regression rutini: `Dev/run_mcp_regression.py` ile 19 kontrolu kapsayan test akisi var.
+10. Bootstrap gecis duzeltmesi daha onceki rapora gore uygulanmis.
 
-🟢 2. NEED SYSTEM → %100 DONE
+## Kismi Biten / Prototip Seviyesinde Olanlar
 
-GDD:
+1. GDD progression derinligi (tam meta loop): temel sistemler var, uzun vadeli icerik ve tuning henuz ince.
+2. Lifecycle ilerleme dengesi: esikler kodda var ama game design balansi son hali degil.
+3. Event cesitliligi: altyapi guclu, icerik adedi halen sinirli.
 
-Hunger
-Happiness
-Hygiene
-Sleep
-Real-time decay
+## Kalan Isler (Oncelikli)
 
-Sen:
+1. Content expansion:
+- Daha fazla observe/mood/absurd event
+- 3 secenekli soru eventleri
+- Gecikmeli sonuc/hafiza olaylari
 
-✔ decay var
-✔ action etkisi var
-✔ state bağlı
+2. GDD derinlik ozellikleri:
+- Memory/hatirlama davranislari
+- Graduation/veda akisinin tam tasarimi
+- Collection ilerleme ve sunumunun zenginlestirilmesi
 
-👉 Tam MVP compliant
+3. Mini game katmani:
+- En az 1 mini game'in production kalitesinde tamamlanmasi
+- Lifecycle/Bond/Need etkilerinin net entegrasyonu
 
-🟢 3. STATE SYSTEM → %90 DONE
+4. UI/UX polish:
+- Egg -> gameplay gecisinin son dokunuslari
+- Feedback (ses, animasyon, haptic placeholder) genisletmesi
 
-GDD:
+5. Test ve kalite:
+- MCP regressionin CI/tekrar kosum disiplini
+- Yeni event/content geldikce regresyon checklistinin genisletilmesi
 
-normal / hungry / dirty / sleepy / sad / critical / sleeping
+## Durum Ozeti
 
-Sen:
-
-✔ state geçişleri var
-✔ idle etkileniyor
-✔ sleep blokluyor
-
-❗ Eksik:
-
-State’e özel event ağırlığı (şu an yok)
-🟢 4. EVENT SYSTEM → %80 DONE
-
-GDD:
-
-Observe
-Mood
-Choice
-Random events
-
-Sen:
-
-✔ micro_event_controller var
-✔ idle trigger var
-✔ choice event çalışıyor
-
-❗ Eksik:
-
-Event çeşitliliği (şu an az)
-GDD’deki “absürt eventler”
-🟢 5. CHOICE SYSTEM → %100 DONE (MVP)
-
-GDD:
-
-Choice → Result → Drift
-
-Sen:
-
-✔ UI ayrı
-✔ signal-based
-✔ logic doğru yerde
-✔ feedback var
-
-👉 Bu chat’in en büyük kazanımı
-
-🟡 6. FEEDBACK SYSTEM → %60 DONE
-
-GDD:
-
-Animasyon
-Metin
-Ses
-Haptic
-
-Sen:
-
-✔ animasyon var
-✔ text feedback var
-
-❗ Eksik:
-
-ses
-haptic
-state/personality bağlı feedback
-🔴 7. PERSONALITY DRIFT → %0 (AMA NORMAL)
-
-GDD’nin en önemli sistemi:
-
-Oyuncu seçimleri → karakter değişir
-
-Sen:
-
-❌ Henüz yok (bilerek yapmadık)
-
-👉 DOĞRU KARAR
-👉 Çünkü core loop oturmadan bu yapılmaz
-
-🔴 8. BOND SYSTEM → %0
-
-GDD:
-
-relationship progression
-event frequency etkiler
-
-Henüz başlamadık
-
-🔴 9. MINI GAME → %0
-
-GDD MVP:
-
-1 mini game yeterli
-
-Henüz yok
-
-🔴 10. EGG SYSTEM → %0
-
-GDD başlangıcı:
-
-yumurta
-hatch
-tür
-
-Henüz yok
-
-📦 GENEL DURUM
-✅ YAPILANLAR (ÇOK DEĞERLİ)
-Core gameplay loop ✔
-Event architecture ✔
-Signal system ✔
-UI/Logic separation ✔
-Idle system ✔
-Choice system ✔
-Feedback başlangıcı ✔
-
-👉 Bu = oyunun %70’i gerçekten
-
-❗ YAPILMAYANLAR
-Personality
-Bond
-Progression
-Content
-Mini game
-Egg system
+- Teknik omurga: Guclu ve calisir durumda
+- MCP fazlari: Smoke + gozlemlenebilirlik + sleep + choice + regression hattina gecilmis
+- Gercek aktif faz: "Sistem kurma" degil, "icerik, denge, polish ve GDD kapsam tamamlama"
